@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:flutter/services.dart';
+import 'package:telemetrydecksdk/telemetry_manager_configuration.dart';
 import 'package:telemetrydecksdk/telemetrydecksdk.dart';
 
 void main() {
+  Telemetrydecksdk.initialize(TelemetryManagerConfiguration(
+      appID: "XXXX", debug: true, testMode: true));
   runApp(const MyApp());
 }
 
@@ -31,8 +34,8 @@ class _MyAppState extends State<MyApp> {
     // Platform messages may fail, so we use a try/catch PlatformException.
     // We also handle the message potentially returning null.
     try {
-      platformVersion =
-          await _telemetrydecksdkPlugin.getPlatformVersion() ?? 'Unknown platform version';
+      platformVersion = await _telemetrydecksdkPlugin.getPlatformVersion() ??
+          'Unknown platform version';
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     }

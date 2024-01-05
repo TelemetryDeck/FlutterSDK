@@ -1,4 +1,5 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
+import 'package:telemetrydecksdk/telemetry_manager_configuration.dart';
 
 import 'telemetrydecksdk_method_channel.dart';
 
@@ -25,5 +26,9 @@ abstract class TelemetrydecksdkPlatform extends PlatformInterface {
 
   Future<String?> getPlatformVersion() {
     throw UnimplementedError('platformVersion() has not been implemented.');
+  }
+
+  Future<void> initialize(TelemetryManagerConfiguration configuration) {
+    throw UnimplementedError('initialize() has not been implemented.');
   }
 }
