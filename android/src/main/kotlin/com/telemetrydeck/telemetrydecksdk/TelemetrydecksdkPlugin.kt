@@ -71,11 +71,6 @@ class TelemetrydecksdkPlugin: FlutterPlugin, MethodCallHandler {
       } else {
         result.error("INVALID_ARGUMENT", "Arguments are not a map", null)
       }
-
-      val builder = TelemetryManager.Builder()
-        .appID("XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX")
-        .showDebugLogs(true)
-        .defaultUser("Person")
     } else {
       result.notImplemented()
     }
