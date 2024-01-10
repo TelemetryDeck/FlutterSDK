@@ -34,32 +34,32 @@ class TelemetrydecksdkPlugin: FlutterPlugin, MethodCallHandler {
       val arguments = call.arguments as? Map<*, *> // Cast to a Map
       if (arguments != null) {
         // Extract values using the expected keys
+        // we extract the required appID parameter
         val appID = arguments["appID"] as? String
-        val apiBaseURL = arguments["apiBaseURL"] as? String
-
-        if (appID == null || apiBaseURL == null) {
-          result.error("INVALID_ARGUMENT", "Expected values appID and apiBaseURL were not found.", null)
+        if (appID == null) {
+          result.error("INVALID_ARGUMENT", "Expected value appID wes not configured.", null)
           return
         }
 
+        // additional optional parameters
+        val apiBaseURL = arguments["apiBaseURL"] as? String?
         val defaultUser = arguments["defaultUser"] as? String?
         val debug = arguments["debug"] as? Boolean
-        val sendNewSessionBeganSignal = arguments["sendNewSessionBeganSignal"] as? Boolean
         val testMode = arguments["testMode"] as? Boolean
+
 
         // initialize the client
         val builder = TelemetryManager.Builder()
           .appID(appID)
-          .baseURL(apiBaseURL)
 
+        apiBaseURL?.let {
+          builder.baseURL(it)
+        }
         defaultUser?.let {
           builder.defaultUser(it)
         }
         debug?.let {
           builder.showDebugLogs(it)
-        }
-        sendNewSessionBeganSignal?.let {
-          builder.sendNewSessionBeganSignal(it)
         }
         testMode?.let {
           builder.testMode(it)
