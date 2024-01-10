@@ -19,4 +19,8 @@ class Telemetrydecksdk {
     await TelemetrydecksdkPlatform.instance.send(signalType,
         clientUser: clientUser, additionalPayload: additionalPayload);
   }
+
+  Future<void> generateNewSession() async {
+    await TelemetrydecksdkPlatform.instance.generateNewSession();
+  }
 }

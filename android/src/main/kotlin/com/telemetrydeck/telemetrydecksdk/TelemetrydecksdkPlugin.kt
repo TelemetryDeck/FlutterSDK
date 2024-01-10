@@ -38,6 +38,9 @@ class TelemetrydecksdkPlugin: FlutterPlugin, MethodCallHandler {
     } else if (call.method == "send") {
       // this maps to the queue method which aligns with the behaviour of the iOS SDK
       nativeQueue(call, result)
+    } else if (call.method == "generateNewSession") {
+      TelemetryManager.newSession()
+      result.success(null)
     } else {
       result.notImplemented()
     }

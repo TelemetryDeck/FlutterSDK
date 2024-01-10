@@ -36,4 +36,8 @@ abstract class TelemetrydecksdkPlatform extends PlatformInterface {
       {String? clientUser, Map<String, String>? additionalPayload}) async {
     throw UnimplementedError('send() has not been implemented.');
   }
+
+  Future<void> generateNewSession() async {
+    throw UnimplementedError('generateNewSession() has not been implemented.');
+  }
 }

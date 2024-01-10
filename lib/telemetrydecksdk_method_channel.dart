@@ -31,4 +31,9 @@ class MethodChannelTelemetrydecksdk extends TelemetrydecksdkPlatform {
       'additionalPayload': additionalPayload
     });
   }
+
+  @override
+  Future<void> generateNewSession() async {
+    await methodChannel.invokeMethod<void>('generateNewSession');
+  }
 }
