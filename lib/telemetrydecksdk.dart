@@ -13,4 +13,10 @@ class Telemetrydecksdk {
       TelemetryManagerConfiguration configuration) async {
     await TelemetrydecksdkPlatform.instance.initialize(configuration);
   }
+
+  Future<void> send(String signalType,
+      {String? clientUser, Map<String, String>? additionalPayload}) async {
+    await TelemetrydecksdkPlatform.instance.send(signalType,
+        clientUser: clientUser, additionalPayload: additionalPayload);
+  }
 }

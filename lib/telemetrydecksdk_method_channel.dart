@@ -21,4 +21,14 @@ class MethodChannelTelemetrydecksdk extends TelemetrydecksdkPlatform {
   Future<void> initialize(TelemetryManagerConfiguration configuration) async {
     await methodChannel.invokeMethod<void>('initialize', configuration.toMap());
   }
+
+  @override
+  Future<void> send(String signalType,
+      {String? clientUser, Map<String, String>? additionalPayload}) async {
+    await methodChannel.invokeMethod<void>('send', {
+      'signalType': signalType,
+      'clientUser': clientUser,
+      'additionalPayload': additionalPayload
+    });
+  }
 }

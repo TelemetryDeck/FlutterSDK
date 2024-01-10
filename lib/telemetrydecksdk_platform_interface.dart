@@ -31,4 +31,9 @@ abstract class TelemetrydecksdkPlatform extends PlatformInterface {
   Future<void> initialize(TelemetryManagerConfiguration configuration) {
     throw UnimplementedError('initialize() has not been implemented.');
   }
+
+  Future<void> send(String signalType,
+      {String? clientUser, Map<String, String>? additionalPayload}) async {
+    throw UnimplementedError('send() has not been implemented.');
+  }
 }
