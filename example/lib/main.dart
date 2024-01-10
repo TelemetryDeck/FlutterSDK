@@ -61,7 +61,26 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Plugin example app'),
         ),
         body: Center(
-          child: Text('Running on: $_platformVersion\n'),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text('Running on: $_platformVersion\n'),
+              const SizedBox(
+                  height:
+                      10), // Adds some space between the text and the button
+              ElevatedButton(
+                onPressed: () {
+                  // Define the action when the button is pressed
+                  _telemetrydecksdkPlugin.send("button_clicked");
+                  _telemetrydecksdkPlugin.send("button_clicked",
+                      clientUser: "user");
+                  _telemetrydecksdkPlugin.send("button_clicked",
+                      additionalPayload: {"mapKey": "mapValue"});
+                },
+                child: const Text('Press Me'),
+              ),
+            ],
+          ),
         ),
       ),
     );
