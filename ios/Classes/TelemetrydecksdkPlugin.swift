@@ -62,7 +62,7 @@ public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
         let debug = arguments["debug"] as? Bool == true
         let testMode = arguments["testMode"] as? Bool == true
         
-        var configuration = TelemetryManagerConfiguration.init(appID: appID, salt: nil, baseURL: baseURL)
+        let configuration = TelemetryManagerConfiguration.init(appID: appID, salt: nil, baseURL: baseURL)
         
         configuration.defaultUser = defaultUser
         
