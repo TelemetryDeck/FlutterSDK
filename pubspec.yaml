@@ -1,11 +1,11 @@
 name: telemetrydecksdk
-description: "A new Flutter plugin project."
+description: "Flutter SDK for TelemetryDeck, a privacy-conscious analytics service for apps and websites"
 version: 0.0.1
-homepage:
+homepage: "https://telemetrydeck.com"
 
 environment:
-  sdk: '>=3.2.3 <4.0.0'
-  flutter: '>=3.3.0'
+  sdk: ">=3.2.3 <4.0.0"
+  flutter: ">=3.3.0"
 
 dependencies:
   flutter:

@@ -14,6 +14,14 @@ class MockTelemetrydecksdkPlatform
   @override
   Future<void> initialize(TelemetryManagerConfiguration configuration) =>
       Future.value();
+
+  @override
+  Future<void> generateNewSession() async => ();
+
+  @override
+  Future<void> send(String signalType,
+          {String? clientUser, Map<String, String>? additionalPayload}) async =>
+      ();
 }
 
 void main() {
