@@ -72,7 +72,7 @@ class TelemetrydecksdkPlugin: FlutterPlugin, MethodCallHandler {
       // we extract the required appID parameter
       val appID = arguments["appID"] as? String
       if (appID == null) {
-        result.error("INVALID_ARGUMENT", "Expected value appID wes not configured.", null)
+        result.error("INVALID_ARGUMENT", "Expected value appID is not provided.", null)
         return
       }
 
