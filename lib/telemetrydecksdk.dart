@@ -31,6 +31,10 @@ class Telemetrydecksdk {
     await TelemetrydecksdkPlatform.instance.generateNewSession();
   }
 
+  Future<void> updateDefaultUser(String clientUser) async {
+    await TelemetrydecksdkPlatform.instance.updateDefaultUser(clientUser);
+  }
+
   Future<Map<String, String>> appendFlutterAttributes(
       Map<String, String>? payload) async {
     Map<String, String> result = payload ?? {};

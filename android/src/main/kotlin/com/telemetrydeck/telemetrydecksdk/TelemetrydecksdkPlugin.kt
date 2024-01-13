@@ -41,8 +41,22 @@ class TelemetrydecksdkPlugin: FlutterPlugin, MethodCallHandler {
     } else if (call.method == "generateNewSession") {
       TelemetryManager.newSession()
       result.success(null)
+    } else if (call.method == "updateDefaultUser") {
+      nativeUpdateDefaultUser(call, result)
     } else {
       result.notImplemented()
+    }
+  }
+
+  private  fun nativeUpdateDefaultUser(call: MethodCall,
+                                       result: Result) {
+    val user = call.arguments<String>()
+
+    coroutineScope.launch {
+      TelemetryManager.newDefaultUser(user)
+      withContext(Dispatchers.Main) {
+        result.success(null)
+      }
     }
   }
 

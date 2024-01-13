@@ -40,4 +40,8 @@ abstract class TelemetrydecksdkPlatform extends PlatformInterface {
   Future<void> generateNewSession() async {
     throw UnimplementedError('generateNewSession() has not been implemented.');
   }
+
+  Future<void> updateDefaultUser(String clientUser) async {
+    throw UnimplementedError('updateDefaultUser() has not been implemented.');
+  }
 }

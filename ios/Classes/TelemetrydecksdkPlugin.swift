@@ -20,9 +20,16 @@ public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
         case "generateNewSession":
             TelemetryManager.generateNewSession()
             result(nil)
+        case "updateDefaultUser":
+            nativeUpdateDefaultUser(call, result: result)
         default:
             result(FlutterMethodNotImplemented)
         }
+    }
+    
+    private func nativeUpdateDefaultUser(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        TelemetryManager.updateDefaultUser(to: call.arguments as? String)
+        result(nil)
     }
     
     private func nativeQueue(_ call: FlutterMethodCall, result: @escaping FlutterResult) {

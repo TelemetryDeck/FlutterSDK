@@ -36,4 +36,9 @@ class MethodChannelTelemetrydecksdk extends TelemetrydecksdkPlatform {
   Future<void> generateNewSession() async {
     await methodChannel.invokeMethod<void>('generateNewSession');
   }
+
+  @override
+  Future<void> updateDefaultUser(String clientUser) async {
+    await methodChannel.invokeMethod<void>('updateDefaultUser', clientUser);
+  }
 }
