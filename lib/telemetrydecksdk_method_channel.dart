@@ -18,8 +18,8 @@ class MethodChannelTelemetrydecksdk extends TelemetrydecksdkPlatform {
   }
 
   @override
-  Future<void> initialize(TelemetryManagerConfiguration configuration) async {
-    await methodChannel.invokeMethod<void>('initialize', configuration.toMap());
+  Future<void> start(TelemetryManagerConfiguration configuration) async {
+    await methodChannel.invokeMethod<void>('start', configuration.toMap());
   }
 
   @override

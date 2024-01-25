@@ -28,8 +28,8 @@ abstract class TelemetrydecksdkPlatform extends PlatformInterface {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 
-  Future<void> initialize(TelemetryManagerConfiguration configuration) {
-    throw UnimplementedError('initialize() has not been implemented.');
+  Future<void> start(TelemetryManagerConfiguration configuration) {
+    throw UnimplementedError('start() has not been implemented.');
   }
 
   Future<void> send(String signalType,

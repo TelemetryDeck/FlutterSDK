@@ -15,9 +15,8 @@ class Telemetrydecksdk {
     return version;
   }
 
-  static Future<void> initialize(
-      TelemetryManagerConfiguration configuration) async {
-    await TelemetrydecksdkPlatform.instance.initialize(configuration);
+  static Future<void> start(TelemetryManagerConfiguration configuration) async {
+    await TelemetrydecksdkPlatform.instance.start(configuration);
   }
 
   Future<void> send(String signalType,

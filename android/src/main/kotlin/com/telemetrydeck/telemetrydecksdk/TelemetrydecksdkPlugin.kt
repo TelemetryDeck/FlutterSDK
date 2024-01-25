@@ -33,7 +33,7 @@ class TelemetrydecksdkPlugin: FlutterPlugin, MethodCallHandler {
   override fun onMethodCall(call: MethodCall, result: Result) {
     if (call.method == "getPlatformVersion") {
       result.success("Android ${android.os.Build.VERSION.RELEASE}")
-    } else if (call.method == "initialize") {
+    } else if (call.method == "start") {
       nativeInitialize(call, result)
     } else if (call.method == "send") {
       // this maps to the queue method which aligns with the behaviour of the iOS SDK

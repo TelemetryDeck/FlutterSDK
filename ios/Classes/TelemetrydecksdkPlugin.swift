@@ -13,7 +13,7 @@ public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
         switch call.method {
         case "getPlatformVersion":
             result("iOS " + UIDevice.current.systemVersion)
-        case "initialize":
+        case "start":
             nativeInitialize(call, result: result)
         case "send":
             nativeQueue(call, result: result)

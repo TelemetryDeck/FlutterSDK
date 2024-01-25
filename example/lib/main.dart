@@ -7,7 +7,7 @@ import 'package:telemetrydecksdk/telemetrydecksdk.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  Telemetrydecksdk.initialize(TelemetryManagerConfiguration(
+  Telemetrydecksdk.start(TelemetryManagerConfiguration(
       appID: "A4CAE055-857C-45F8-8C6B-335E3617050D",
       debug: true,
       testMode: true));

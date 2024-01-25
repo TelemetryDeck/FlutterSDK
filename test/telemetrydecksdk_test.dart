@@ -12,11 +12,14 @@ class MockTelemetrydecksdkPlatform
   Future<String?> getPlatformVersion() => Future.value('42');
 
   @override
-  Future<void> initialize(TelemetryManagerConfiguration configuration) =>
+  Future<void> start(TelemetryManagerConfiguration configuration) =>
       Future.value();
 
   @override
   Future<void> generateNewSession() async => ();
+
+  @override
+  Future<void> updateDefaultUser(String clientUser) async => ();
 
   @override
   Future<void> send(String signalType,
@@ -46,6 +49,6 @@ void main() {
     var configuration = TelemetryManagerConfiguration(appID: "XXXX-XXXX-XXXXX");
 
     // if no exception occures the test will pass
-    await Telemetrydecksdk.initialize(configuration);
+    await Telemetrydecksdk.start(configuration);
   });
 }
