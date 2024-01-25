@@ -15,6 +15,8 @@ public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
             result("iOS " + UIDevice.current.systemVersion)
         case "start":
             nativeInitialize(call, result: result)
+        case "stop":
+            nativeStop(call, result: result)
         case "send":
             nativeQueue(call, result: result)
         case "generateNewSession":
@@ -25,6 +27,11 @@ public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
         default:
             result(FlutterMethodNotImplemented)
         }
+    }
+    
+    private func nativeStop(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        TelemetryManager.terminate()
+        result(nil)
     }
     
     private func nativeUpdateDefaultUser(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -41,8 +48,11 @@ public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
         let clientUser = arguments["clientUser"] as? String
         let additionalPayload = arguments["additionalPayload"] as? [String : String] ?? [:]
         
-        TelemetryManager.send(signalType, for: clientUser, with: additionalPayload)
-        // success
+        // do not attempt to send signals if the client is stopped
+        if TelemetryManager.isInitialized {
+            TelemetryManager.send(signalType, for: clientUser, with: additionalPayload)
+        }
+        
         result(nil)
     }
     

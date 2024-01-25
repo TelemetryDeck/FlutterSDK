@@ -23,6 +23,11 @@ class MethodChannelTelemetrydecksdk extends TelemetrydecksdkPlatform {
   }
 
   @override
+  Future<void> stop() async {
+    await methodChannel.invokeMethod<void>('stop');
+  }
+
+  @override
   Future<void> send(String signalType,
       {String? clientUser, Map<String, String>? additionalPayload}) async {
     await methodChannel.invokeMethod<void>('send', {

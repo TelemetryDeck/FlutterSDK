@@ -19,6 +19,10 @@ class Telemetrydecksdk {
     await TelemetrydecksdkPlatform.instance.start(configuration);
   }
 
+  static Future<void> stop() async {
+    await TelemetrydecksdkPlatform.instance.stop();
+  }
+
   Future<void> send(String signalType,
       {String? clientUser, Map<String, String>? additionalPayload}) async {
     var payload = await appendFlutterAttributes(additionalPayload);

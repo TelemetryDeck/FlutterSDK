@@ -35,6 +35,8 @@ class TelemetrydecksdkPlugin: FlutterPlugin, MethodCallHandler {
       result.success("Android ${android.os.Build.VERSION.RELEASE}")
     } else if (call.method == "start") {
       nativeInitialize(call, result)
+    } else if (call.method == "stop") {
+      nativeStop(call, result)
     } else if (call.method == "send") {
       // this maps to the queue method which aligns with the behaviour of the iOS SDK
       nativeQueue(call, result)
@@ -48,7 +50,16 @@ class TelemetrydecksdkPlugin: FlutterPlugin, MethodCallHandler {
     }
   }
 
-  private  fun nativeUpdateDefaultUser(call: MethodCall,
+  private fun nativeStop(call: MethodCall, result: Result) {
+    coroutineScope.launch {
+      TelemetryManager.stop()
+      withContext(Dispatchers.Main) {
+        result.success(null)
+      }
+    }
+  }
+
+  private fun nativeUpdateDefaultUser(call: MethodCall,
                                        result: Result) {
     val user = call.arguments<String>()
 
