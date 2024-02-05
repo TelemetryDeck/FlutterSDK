@@ -50,8 +50,8 @@ class Telemetrydecksdk {
   Future<Map<String, String>> appendFlutterAttributes(
       Map<String, String>? payload) async {
     Map<String, String> result = payload ?? {};
-    result['telemetryClientVersion'] = getDartVersion();
-    print("version: ${getDartVersion()}");
+    result['telemetryClientVersion'] = await sdkVersion;
+    result['dartVersion'] = getDartVersion();
     return result;
   }
 }
