@@ -11,7 +11,6 @@ dependencies:
   flutter:
     sdk: flutter
   plugin_platform_interface: ^2.0.2
-  yaml: ^3.1.2
 
 dev_dependencies:
   flutter_test:
@@ -41,10 +40,6 @@ flutter:
       ios:
         pluginClass: TelemetrydecksdkPlugin
 
-  # To add assets to your plugin package, add an assets section, like this:
-  assets:
-    - assets/versions.yaml
-  #
   # For details regarding assets in packages, see
   # https://flutter.dev/assets-and-images/#from-packages
   #

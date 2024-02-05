@@ -1,20 +1,12 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:telemetrydecksdk/read_versions.dart';
+import 'package:telemetrydecksdk/versions.dart';
 import 'package:telemetrydecksdk/telemetry_manager_configuration.dart';
 
 import 'telemetrydecksdk_platform_interface.dart';
 
 class Telemetrydecksdk {
-  Future<String>? _sdkVersion;
-
-  Future<String> get sdkVersion async {
-    _sdkVersion ??= getTelemetryClientVersion();
-
-    return await _sdkVersion!;
-  }
-
   Future<String?> getPlatformVersion() {
     return TelemetrydecksdkPlatform.instance.getPlatformVersion();
   }
@@ -50,7 +42,7 @@ class Telemetrydecksdk {
   Future<Map<String, String>> appendFlutterAttributes(
       Map<String, String>? payload) async {
     Map<String, String> result = payload ?? {};
-    result['telemetryClientVersion'] = await sdkVersion;
+    result['telemetryClientVersion'] = "Flutter $telemetryClientVersion";
     result['dartVersion'] = getDartVersion();
     return result;
   }
