@@ -16,6 +16,9 @@ class MockTelemetrydecksdkPlatform
       Future.value();
 
   @override
+  Future<void> stop() async => ();
+
+  @override
   Future<void> generateNewSession() async => ();
 
   @override
