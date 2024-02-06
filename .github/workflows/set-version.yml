@@ -18,7 +18,7 @@ jobs:
       - name: Update version.txt
         run: echo ${{ inputs.version }} > version.txt
       - name: Update library version
-        run: ./setversion.sh
+        run: bash ./setversion.sh
       - name: Commit version change
         run: |
           git config --global user.name 'Daniel Jilg'
