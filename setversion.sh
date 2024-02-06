@@ -15,4 +15,11 @@ else
   sed -i "s/^version: .*/version: ${NEW_VERSION}/g" "pubspec.yaml"
 fi
 
+# pub.dev requires that the CHANGELOG includes the version number.
+# Make sure the CHANGELOG includes this version number. This is optional because it may have been updated manually by another action.
+if ! grep -q "## ${NEW_VERSION}" CHANGELOG.md; then
+  echo "CHANGELOG.md does not include a section for version ${NEW_VERSION}."
+  echo -e "## ${NEW_VERSION}\n\n- https://github.com/TelemetryDeck/FlutterSDK/releases/tag/${NEW_VERSION}\n\n" | cat - CHANGELOG.md > temp && mv temp CHANGELOG.md
+fi
+
 echo "Version updated to ${NEW_VERSION}."
