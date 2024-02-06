@@ -3,7 +3,7 @@ PODS:
   - integration_test (0.0.1):
     - Flutter
   - TelemetryClient (1.5.0)
-  - telemetrydecksdk (0.0.1):
+  - telemetrydecksdk (1.0.0):
     - Flutter
     - TelemetryClient
 
@@ -28,8 +28,8 @@ SPEC CHECKSUMS:
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   integration_test: 13825b8a9334a850581300559b8839134b124670
   TelemetryClient: efd281e6bbee69b0f5f7afc1eeb44067a5b41944
-  telemetrydecksdk: 3eaa2e280feb00ae51475838a4149dcd92801207
+  telemetrydecksdk: 97305a39cfcc797ff80cecaaa6d815e61343145d
 
 PODFILE CHECKSUM: 7be2f5f74864d463a8ad433546ed1de7e0f29aef
 
-COCOAPODS: 1.14.3
+COCOAPODS: 1.15.0
