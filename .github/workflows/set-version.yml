@@ -1,0 +1,28 @@
+name: Create a package version
+on:
+  workflow_dispatch:
+    inputs:
+      # release:
+      #   type: boolean
+      #   description: "Create GitHub release?"
+      #   default: false
+      version:
+        description: Version 'X.X.X'
+
+jobs:
+  do-it:
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+      - uses: actions/checkout@v3
+      - name: Update version.txt
+        run: echo ${{ inputs.version }} > version.txt
+      - name: Update library version
+        run: ./setversion.sh
+      - name: Commit version change
+        run: |
+          git config --global user.name 'Daniel Jilg'
+          git config --global user.email 'winsmith@users.noreply.github.com'
+          git tag ${{ inputs.version }}
+          git commit -am "Update version to ${{ inputs.version }}"
+          git push
