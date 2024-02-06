@@ -1,4 +1,4 @@
-name: Create a package version
+name: Set package version
 on:
   workflow_dispatch:
     inputs:
