@@ -1,3 +1,8 @@
+## 1.0.3
+
+- https://github.com/TelemetryDeck/FlutterSDK/releases/tag/1.0.3
+
+
 ## 1.0.0
 
 - TelemetryDeck Flutter SDK
