@@ -1,1 +1,1 @@
-const String telemetryClientVersion = "1.0.9";
+const String telemetryClientVersion = "1.0.0";
