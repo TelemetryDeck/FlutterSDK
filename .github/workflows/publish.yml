@@ -23,9 +23,11 @@ jobs:
       - uses: actions/checkout@v4
       - uses: dart-lang/setup-dart@b64355ae6ca0b5d484f0106a033dd1388965d06d
       - uses: subosito/flutter-action@2783a3f08e1baf891508463f8c6653c258246225
+      - name: Check flutter version
+        run: flutter --version
       - name: Install dependencies
-        run: dart pub get
+        run: flutter pub get
       - name: Publish - dry run
-        run: dart pub publish --dry-run
+        run: flutter pub publish --dry-run
       - name: Publish to pub.dev
-        run: dart pub publish -f
+        run: flutter pub publish -f
