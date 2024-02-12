@@ -1,3 +1,8 @@
+## 1.0.2
+
+- https://github.com/TelemetryDeck/FlutterSDK/releases/tag/1.0.2
+
+
 ## 1.0.1
 
 - https://github.com/TelemetryDeck/FlutterSDK/releases/tag/1.0.1
