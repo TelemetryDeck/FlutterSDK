@@ -28,5 +28,5 @@ jobs:
           git config --global user.name 'Daniel Jilg'
           git config --global user.email 'winsmith@users.noreply.github.com'
           git commit -am "Update version to ${{ inputs.version }}"
-          git tag ${{ inputs.version }}
+          git tag -a ${{ inputs.version }} -m "${{ inputs.version }}"
           git push --follow-tags
