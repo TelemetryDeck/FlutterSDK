@@ -19,13 +19,14 @@ jobs:
           token: ${{ secrets.PAT }}
       - name: Update version.txt
         run: echo ${{ inputs.version }} > version.txt
+
       - name: Update library version
         run: bash ./setversion.sh
+
       - name: Commit version change
         run: |
           git config --global user.name 'Daniel Jilg'
           git config --global user.email 'winsmith@users.noreply.github.com'
-          git tag ${{ inputs.version }}
           git commit -am "Update version to ${{ inputs.version }}"
-          git push
-          git push origin ${{ inputs.version }}
+          git tag ${{ inputs.version }}
+          git push --follow-tags
