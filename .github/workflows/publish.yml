@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: subosito/flutter-action@2
+      - uses: subosito/flutter-action@v2
 
       - name: Check flutter version
         run: flutter --version
