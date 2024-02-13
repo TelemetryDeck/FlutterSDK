@@ -6,7 +6,7 @@ This package allows your app to send signals to [TelemetryDeck](https://telemetr
 
 - Obtain your TelemetryDeck App ID from the [Dashboard](https://dashboard.telemetrydeck.com/)
 
-- Follow the installing instructions on [pub.dev](). (TODO UPDATE LINK)
+- Follow the installing instructions on [pub.dev](https://pub.dev/packages/telemetrydecksdk/install).
 
 - Initialize the TelemetryClient:
 
