@@ -31,9 +31,7 @@ class TelemetrydecksdkPlugin: FlutterPlugin, MethodCallHandler {
   }
 
   override fun onMethodCall(call: MethodCall, result: Result) {
-    if (call.method == "getPlatformVersion") {
-      result.success("Android ${android.os.Build.VERSION.RELEASE}")
-    } else if (call.method == "start") {
+    if (call.method == "start") {
       nativeInitialize(call, result)
     } else if (call.method == "stop") {
       nativeStop(call, result)

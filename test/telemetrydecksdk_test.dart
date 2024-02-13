@@ -9,9 +9,6 @@ class MockTelemetrydecksdkPlatform
     with MockPlatformInterfaceMixin
     implements TelemetrydecksdkPlatform {
   @override
-  Future<String?> getPlatformVersion() => Future.value('42');
-
-  @override
   Future<void> start(TelemetryManagerConfiguration configuration) =>
       Future.value();
 
@@ -36,14 +33,6 @@ void main() {
 
   test('$MethodChannelTelemetrydecksdk is the default instance', () {
     expect(initialPlatform, isInstanceOf<MethodChannelTelemetrydecksdk>());
-  });
-
-  test('getPlatformVersion', () async {
-    Telemetrydecksdk telemetrydecksdkPlugin = Telemetrydecksdk();
-    MockTelemetrydecksdkPlatform fakePlatform = MockTelemetrydecksdkPlatform();
-    TelemetrydecksdkPlatform.instance = fakePlatform;
-
-    expect(await telemetrydecksdkPlugin.getPlatformVersion(), '42');
   });
 
   test('initialize', () async {

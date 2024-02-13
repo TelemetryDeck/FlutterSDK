@@ -11,13 +11,6 @@ class MethodChannelTelemetrydecksdk extends TelemetrydecksdkPlatform {
   final methodChannel = const MethodChannel('telemetrydecksdk');
 
   @override
-  Future<String?> getPlatformVersion() async {
-    final version =
-        await methodChannel.invokeMethod<String>('getPlatformVersion');
-    return version;
-  }
-
-  @override
   Future<void> start(TelemetryManagerConfiguration configuration) async {
     await methodChannel.invokeMethod<void>('start', configuration.toMap());
   }

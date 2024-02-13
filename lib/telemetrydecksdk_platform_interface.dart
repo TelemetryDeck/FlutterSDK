@@ -24,10 +24,6 @@ abstract class TelemetrydecksdkPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<String?> getPlatformVersion() {
-    throw UnimplementedError('platformVersion() has not been implemented.');
-  }
-
   Future<void> start(TelemetryManagerConfiguration configuration) {
     throw UnimplementedError('start() has not been implemented.');
   }
