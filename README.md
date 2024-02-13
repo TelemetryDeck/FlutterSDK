@@ -47,6 +47,27 @@ TelemetryManager.send("signal_type",
 }
 ```
 
+The Flutter SDK uses the native SDKs for Android and iOS which offer a number of built-in attributes which are submitted with every signal. You can overwrite these attributes by providing a custom value with the same key. For more information on how each value is calcualted, check the corresponding platform library:
+
+- `majorMinorSystemVersion`
+- `telemetryClientVersion`
+- `isTestFlight` (iOS only)
+- `isDebug`
+- `architecture`
+- `modelName`
+- `isAppStore`
+- `appVersion`
+- `operatingSystem`
+- `systemVersion`
+- `majorSystemVersion`
+- `targetEnvironment`
+- `isSimulator` (iOS only)
+- `platform` (iOS only)
+- `buildNumber` (iOS only)
+- `locale`
+- `dartVersion`
+- `brand` (Android only)
+
 ## Stop sending signals
 
 Prevent signals from being sent using the stop method:
