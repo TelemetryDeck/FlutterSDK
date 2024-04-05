@@ -1,16 +1,19 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
 
-import 'package:flutter/services.dart';
-import 'package:telemetrydecksdk/telemetry_manager_configuration.dart';
-import 'package:telemetrydecksdk/telemetrydecksdk.dart';
+import 'package:flutter/material.dart';
+import 'package:telemetrydecksdk/telemetry_deck_sdk.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  Telemetrydecksdk.start(TelemetryManagerConfiguration(
+
+  Telemetrydecksdk.start(
+    const TelemetryManagerConfiguration(
       appID: "A4CAE055-857C-45F8-8C6B-335E3617050D",
       debug: true,
-      testMode: true));
+      testMode: true,
+    ),
+  );
+
   runApp(const MyApp());
 }
 
@@ -22,8 +25,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final _telemetrydecksdkPlugin = Telemetrydecksdk();
-
   @override
   void initState() {
     super.initState();
@@ -50,17 +51,23 @@ class _MyAppState extends State<MyApp> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               const Text('Hello !'),
-              const SizedBox(
-                  height:
-                      10), // Adds some space between the text and the button
+              const SizedBox(height: 10), // Adds some space between the text and the button
               ElevatedButton(
                 onPressed: () {
                   // Define the action when the button is pressed
-                  _telemetrydecksdkPlugin.send("button_clicked");
-                  _telemetrydecksdkPlugin.send("button_clicked",
-                      clientUser: "user");
-                  _telemetrydecksdkPlugin.send("button_clicked",
-                      additionalPayload: {"mapKey": "mapValue"});
+                  Telemetrydecksdk.send("button_clicked");
+
+                  // Provide additional user information
+                  Telemetrydecksdk.send(
+                    "button_clicked",
+                    clientUser: "user",
+                  );
+
+                  // Provide additional payload information
+                  Telemetrydecksdk.send(
+                    "button_clicked",
+                    additionalPayload: {"mapKey": "mapValue"},
+                  );
                 },
                 child: const Text('Press Me'),
               ),
