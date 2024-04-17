@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-import 'package:flutter/services.dart';
 import 'package:telemetrydecksdk/telemetry_manager_configuration.dart';
 import 'package:telemetrydecksdk/telemetrydecksdk.dart';
 
