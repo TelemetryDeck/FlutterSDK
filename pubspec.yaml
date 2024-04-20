@@ -39,6 +39,8 @@ flutter:
         pluginClass: TelemetrydecksdkPlugin
       ios:
         pluginClass: TelemetrydecksdkPlugin
+      macos:
+        pluginClass: TelemetrydecksdkPlugin
 
   # For details regarding assets in packages, see
   # https://flutter.dev/assets-and-images/#from-packages
