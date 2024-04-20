@@ -72,26 +72,27 @@ public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
             baseURL = url
         }
         
+        let configuration = TelemetryManagerConfiguration.init(
+            appID: appID, salt: nil, baseURL: baseURL)
+        
         // other optional params
-        let defaultUser = arguments["defaultUser"] as? String
-        let debug = arguments["debug"] as? Bool == true
-        let testMode = arguments["testMode"] as? Bool == true
-        
-        let configuration = TelemetryManagerConfiguration.init(appID: appID, salt: nil, baseURL: baseURL)
-        
-        configuration.defaultUser = defaultUser
-        
-        if debug {
-            // by default, the library logs with level .info
-            configuration.logHandler = LogHandler.stdout(.debug)
+        if arguments.keys.contains("defaultUser") {
+            configuration.defaultUser = arguments["defaultUser"] as? String
         }
         
-        if testMode {
-            configuration.testMode = true
+        if arguments.keys.contains("debug") {
+            if arguments["debug"] as? Bool == true {
+                // by default, the library logs with level .info
+                configuration.logHandler = LogHandler.stdout(.debug)
+            }
+        }
+        
+        if arguments.keys.contains("testMode") {
+            configuration.testMode = arguments["testMode"] as? Bool == true
         }
         
         TelemetryManager.initialize(with: configuration)
-        // success
+        
         result(nil)
     }
 }
