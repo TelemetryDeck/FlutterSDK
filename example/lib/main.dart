@@ -7,9 +7,7 @@ import 'package:telemetrydecksdk/telemetrydecksdk.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   Telemetrydecksdk.start(TelemetryManagerConfiguration(
-      appID: "A4CAE055-857C-45F8-8C6B-335E3617050D",
-      debug: true,
-      testMode: true));
+      appID: "your TelemetryDeck App ID", debug: true, testMode: true));
   runApp(const MyApp());
 }
 
@@ -49,13 +47,12 @@ class _MyAppState extends State<MyApp> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               const Text('Hello !'),
-              const SizedBox(
-                  height:
-                      10), // Adds some space between the text and the button
+              const SizedBox(height: 10),
               ElevatedButton(
                 onPressed: () {
-                  // Define the action when the button is pressed
+                  // Send a signal type to TelemetryDeck
                   _telemetrydecksdkPlugin.send("button_clicked");
+                  // You can optionally attach parameters to the signal
                   _telemetrydecksdkPlugin.send("button_clicked",
                       clientUser: "user");
                   _telemetrydecksdkPlugin.send("button_clicked",
