@@ -1,0 +1,29 @@
+PODS:
+  - FlutterMacOS (1.0.0)
+  - TelemetryClient (1.5.0)
+  - telemetrydecksdk (0.0.1):
+    - FlutterMacOS
+    - TelemetryClient
+
+DEPENDENCIES:
+  - FlutterMacOS (from `Flutter/ephemeral`)
+  - telemetrydecksdk (from `Flutter/ephemeral/.symlinks/plugins/telemetrydecksdk/macos`)
+
+SPEC REPOS:
+  trunk:
+    - TelemetryClient
+
+EXTERNAL SOURCES:
+  FlutterMacOS:
+    :path: Flutter/ephemeral
+  telemetrydecksdk:
+    :path: Flutter/ephemeral/.symlinks/plugins/telemetrydecksdk/macos
+
+SPEC CHECKSUMS:
+  FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
+  TelemetryClient: efd281e6bbee69b0f5f7afc1eeb44067a5b41944
+  telemetrydecksdk: 82d2ec492fa1249c0d2e3b1f0226465ba2a06525
+
+PODFILE CHECKSUM: 236401fc2c932af29a9fcf0e97baeeb2d750d367
+
+COCOAPODS: 1.15.2

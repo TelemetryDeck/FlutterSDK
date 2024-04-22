@@ -23,11 +23,19 @@ void main() {
 
 ## Permission for internet access
 
-Sending signals requires access to the internet so the following permission should be added to the app's `AndroidManifest.xml`:
+Sending signals requires access to the internet so the following permissions should be granted. For more information, you can check [Flutter Cross-platform HTTP networking ](https://docs.flutter.dev/data-and-backend/networking).
+
+### Android
+
+Change the app's `AndroidManifest.xml` to include:
 
 ```xml
 <uses-permission android:name="android.permission.INTERNET" />
 ```
+
+### macOS
+
+Set the `com.apple.security.network.client` entitlement to `true` in the `macos/Runner/DebugProfile.entitlements` and `macos/Runner/Release.entitlements` files. You can also do this in Xcode by selecting the `macos` target, then the `Signing & Capabilities` tab, and checking `Outgoing connections (Client)` for both the Release and Debug targets of your app.
 
 ## Sending signals
 
@@ -89,6 +97,8 @@ Telemetrydecksdk.start(TelemetryManagerConfiguration(
   appID: "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
   testMode: true));
 ```
+
+[Getting started with Test Mode](https://telemetrydeck.com/docs/articles/test-mode/)
 
 ## Custom Server
 
