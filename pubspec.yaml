@@ -3,6 +3,8 @@ description: "Flutter SDK for TelemetryDeck, a privacy-conscious analytics servi
 version: 0.0.5
 homepage: "https://telemetrydeck.com"
 repository: "https://github.com/TelemetryDeck/FlutterSDK"
+issue_tracker: "https://github.com/TelemetryDeck/FlutterSDK/issues"
+documentation: "https://telemetrydeck.com/docs/"
 
 environment:
   sdk: ">=3.2.3 <4.0.0"
