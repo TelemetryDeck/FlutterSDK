@@ -1,3 +1,8 @@
+## 0.2.0
+
+- https://github.com/TelemetryDeck/FlutterSDK/releases/tag/0.2.0
+
+
 ## 0.1.0
 
 - TelemetryDeck SDK is now available for macOS apps
