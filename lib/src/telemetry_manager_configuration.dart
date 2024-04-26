@@ -14,18 +14,18 @@ class TelemetryManagerConfiguration {
 
   /// Log the current status to the signal cache to the console.
   /// Default is `false`.
-  final bool debug;
+  final bool? debug;
 
   /// If `true` any signals sent will be marked as *Testing* signals.
   /// Default is `false`.
-  final bool testMode;
+  final bool? testMode;
 
   const TelemetryManagerConfiguration({
     required this.appID,
     this.apiBaseURL,
     this.defaultUser,
-    this.debug = false,
-    this.testMode = false,
+    this.debug,
+    this.testMode,
   });
 
   /// to map
