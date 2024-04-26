@@ -1,6 +1,6 @@
 # TelemetryDeck SDK for Flutter
 
-This package allows your app to send signals to [TelemetryDeck](https://telemetrydeck.com/) using the native TelemetryDeck libraries for [Kotlin](https://github.com/TelemetryDeck/KotlinSDK) and [iOS](https://github.com/TelemetryDeck/dartClient).
+This package allows your app to send signals to [TelemetryDeck](https://telemetrydeck.com/) using the native TelemetryDeck libraries for [Kotlin](https://github.com/TelemetryDeck/KotlinSDK) and [iOS](https://github.com/TelemetryDeck/Swift).
 
 ## Getting started
 
