@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:telemetrydecksdk/src/telemetrydecksdk_method_channel.dart';
 import 'package:telemetrydecksdk/src/telemetrydecksdk_platform_interface.dart';
-import 'package:telemetrydecksdk/telemetry_deck_sdk.dart';
+import 'package:telemetrydecksdk/telemetrydecksdk.dart';
 
 class MockTelemetrydecksdkPlatform
     with MockPlatformInterfaceMixin
