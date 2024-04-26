@@ -1,10 +1,12 @@
 import 'dart:async';
 
-import 'package:telemetrydecksdk/telemetry_deck_sdk.dart';
+import 'package:flutter/material.dart';
+import 'package:telemetrydecksdk/telemetrydecksdk.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  Telemetrydecksdk.start(TelemetryManagerConfiguration(
+  Telemetrydecksdk.start(
+    const TelemetryManagerConfiguration(
       appID: "A4CAE055-857C-45F8-8C6B-335E3617050D",
       debug: true,
       testMode: true,
