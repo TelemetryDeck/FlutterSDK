@@ -1,10 +1,11 @@
-import Flutter
-import UIKit
+import Cocoa
+import FlutterMacOS
 import TelemetryClient
 
 public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
     public static func register(with registrar: FlutterPluginRegistrar) {
-        let channel = FlutterMethodChannel(name: "telemetrydecksdk", binaryMessenger: registrar.messenger())
+        let channel = FlutterMethodChannel(
+            name: "telemetrydecksdk", binaryMessenger: registrar.messenger)
         let instance = TelemetrydecksdkPlugin()
         registrar.addMethodCallDelegate(instance, channel: channel)
     }
@@ -38,13 +39,17 @@ public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
     }
     
     private func nativeQueue(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        guard let arguments = call.arguments as? [String: Any], let signalType = arguments["signalType"] as? String else {
-            result(FlutterError(code: "INVALID_ARGUMENT", message: "Missing required argument signalType", details: nil))
+        guard let arguments = call.arguments as? [String: Any],
+              let signalType = arguments["signalType"] as? String
+        else {
+            result(
+                FlutterError(
+                    code: "INVALID_ARGUMENT", message: "Missing required argument signalType", details: nil))
             return
         }
         
         let clientUser = arguments["clientUser"] as? String
-        let additionalPayload = arguments["additionalPayload"] as? [String : String] ?? [:]
+        let additionalPayload = arguments["additionalPayload"] as? [String: String] ?? [:]
         
         // do not attempt to send signals if the client is stopped
         if TelemetryManager.isInitialized {
@@ -56,13 +61,16 @@ public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
     
     private func nativeInitialize(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         guard let arguments = call.arguments as? [String: Any] else {
-            result(FlutterError(code: "INVALID_ARGUMENT", message: "Arguments are not a map", details: nil))
+            result(
+                FlutterError(code: "INVALID_ARGUMENT", message: "Arguments are not a map", details: nil))
             return
         }
         
         // appD is required
         guard let appID: String = arguments["appID"] as? String else {
-            result(FlutterError(code: "INVALID_ARGUMENT", message: "Expected value appID is not provided.", details: nil))
+            result(
+                FlutterError(
+                    code: "INVALID_ARGUMENT", message: "Expected value appID is not provided.", details: nil))
             return
         }
         
@@ -71,6 +79,7 @@ public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
         if let apiBaseURL = arguments["apiBaseURL"] as? String, let url = URL(string: apiBaseURL) {
             baseURL = url
         }
+        
         
         let configuration = TelemetryManagerConfiguration.init(
             appID: appID, salt: nil, baseURL: baseURL)

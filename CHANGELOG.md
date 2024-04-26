@@ -1,3 +1,18 @@
+## 0.3.0
+
+- https://github.com/TelemetryDeck/FlutterSDK/releases/tag/0.3.0
+
+
+## 0.2.0
+
+- https://github.com/TelemetryDeck/FlutterSDK/releases/tag/0.2.0
+
+
+## 0.1.0
+
+- TelemetryDeck SDK is now available for macOS apps
+- Improvements to documentation and pub.dev listing
+
 ## 0.0.6
 - Updated `flutter_lints` dependency
 - Updated package to make it compliant with flutter package rules

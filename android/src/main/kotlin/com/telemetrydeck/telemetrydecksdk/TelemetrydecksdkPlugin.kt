@@ -2,6 +2,8 @@ package com.telemetrydeck.telemetrydecksdk
 
 import android.app.Application
 import android.content.Context
+import com.telemetrydeck.sdk.EnvironmentMetadataProvider
+import com.telemetrydeck.sdk.SessionProvider
 import com.telemetrydeck.sdk.TelemetryManager
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin
@@ -106,9 +108,11 @@ class TelemetrydecksdkPlugin: FlutterPlugin, MethodCallHandler {
       val testMode = arguments["testMode"] as? Boolean
 
 
-      // initialize the client
+      // Initialize the client
+      // Do not activate the lifecycle provider
       val builder = TelemetryManager.Builder()
         .appID(appID)
+        .providers(listOf(SessionProvider(), EnvironmentMetadataProvider()))
 
       apiBaseURL?.let {
         builder.baseURL(it)

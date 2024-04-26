@@ -1,19 +1,15 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:telemetrydecksdk/telemetry_deck_sdk.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-
-  Telemetrydecksdk.start(
-    const TelemetryManagerConfiguration(
+  Telemetrydecksdk.start(TelemetryManagerConfiguration(
       appID: "A4CAE055-857C-45F8-8C6B-335E3617050D",
       debug: true,
       testMode: true,
     ),
   );
-
   runApp(const MyApp());
 }
 
@@ -54,15 +50,13 @@ class _MyAppState extends State<MyApp> {
               const SizedBox(height: 10), // Adds some space between the text and the button
               ElevatedButton(
                 onPressed: () {
-                  // Define the action when the button is pressed
+                  // Send a signal type to TelemetryDeck
                   Telemetrydecksdk.send("button_clicked");
-
-                  // Provide additional user information
+                  // You can optionally attach parameters to the signal
                   Telemetrydecksdk.send(
                     "button_clicked",
                     clientUser: "user",
                   );
-
                   // Provide additional payload information
                   Telemetrydecksdk.send(
                     "button_clicked",
