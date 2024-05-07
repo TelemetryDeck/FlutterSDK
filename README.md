@@ -15,8 +15,12 @@ void main() {
   // ensure the platform channels are available
   WidgetsFlutterBinding.ensureInitialized();
   // configure and start the TelemetryClient
-  Telemetrydecksdk.start(TelemetryManagerConfiguration(
-      appID: "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"));
+  Telemetrydecksdk.start(
+    TelemetryManagerConfiguration(
+      appID: "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
+    ),
+  );
+
   runApp(const MyApp());
 }
 ```
@@ -42,7 +46,7 @@ Set the `com.apple.security.network.client` entitlement to `true` in the `macos/
 Send a signal using the following method:
 
 ```dart
-TelemetryManager.send("signal_type")
+Telemetrydecksdk.send("signal_type")
 ```
 
 ## Signals with additional attributes
@@ -50,9 +54,10 @@ TelemetryManager.send("signal_type")
 Append any number of custom attributes to a signal:
 
 ```dart
-TelemetryManager.send("signal_type",
-  additionalPayload: {"attributeName": "value"});
-}
+Telemetrydecksdk.send(
+  "signal_type",
+  additionalPayload: {"attributeName": "value"},
+);
 ```
 
 The Flutter SDK uses the native SDKs for Android and iOS which offer a number of built-in attributes which are submitted with every signal. You can overwrite these attributes by providing a custom value with the same key. For more information on how each value is calcualted, check the corresponding platform library:
@@ -81,7 +86,7 @@ The Flutter SDK uses the native SDKs for Android and iOS which offer a number of
 Prevent signals from being sent using the stop method:
 
 ```dart
-TelemetryManager.stop()
+Telemetrydecksdk.stop()
 ```
 
 In order to restart sending events, you will need to call the `start` method again.
@@ -92,10 +97,13 @@ If your app's build configuration is set to "Debug", all signals sent will be ma
 
 If you want to manually control whether test mode is active, you can set the `testMode` field:
 
-```swift
-Telemetrydecksdk.start(TelemetryManagerConfiguration(
-  appID: "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
-  testMode: true));
+```dart
+Telemetrydecksdk.start(
+  TelemetryManagerConfiguration(
+    appID: "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
+    testMode: true,
+  ),
+);
 ```
 
 [Getting started with Test Mode](https://telemetrydeck.com/docs/articles/test-mode/)
@@ -104,10 +112,13 @@ Telemetrydecksdk.start(TelemetryManagerConfiguration(
 
 A very small subset of our customers will want to use a custom signal ingestion server or a custom proxy server. To do so, you can pass the URL of the custom server to the `TelemetryManagerConfiguration`:
 
-```swift
-Telemetrydecksdk.start(TelemetryManagerConfiguration(
-  appID: "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
-  apiBaseURL: "https://nom.telemetrydeck.com"));
+```dart
+Telemetrydecksdk.start(
+  TelemetryManagerConfiguration(
+    appID: "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
+    apiBaseURL: "https://nom.telemetrydeck.com",
+  ),
+);
 ```
 
 ## Logging output
@@ -116,8 +127,11 @@ By default, some logs helpful for monitoring TelemetryDeck are printed out to th
 
 ```dart
 void main() {
-  Telemetrydecksdk.start(TelemetryManagerConfiguration(
+  Telemetrydecksdk.start(
+    TelemetryManagerConfiguration(
       appID: "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
-      debug: true));
+      debug: true,
+    ),
+  );
 }
 ```

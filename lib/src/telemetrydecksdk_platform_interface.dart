@@ -1,5 +1,5 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
-import 'package:telemetrydecksdk/telemetry_manager_configuration.dart';
+import 'package:telemetrydecksdk/src/telemetry_manager_configuration.dart';
 
 import 'telemetrydecksdk_method_channel.dart';
 
@@ -32,8 +32,11 @@ abstract class TelemetrydecksdkPlatform extends PlatformInterface {
     throw UnimplementedError('stop() has not been implemented.');
   }
 
-  Future<void> send(String signalType,
-      {String? clientUser, Map<String, String>? additionalPayload}) async {
+  Future<void> send(
+    String signalType, {
+    String? clientUser,
+    Map<String, String>? additionalPayload,
+  }) async {
     throw UnimplementedError('send() has not been implemented.');
   }
 

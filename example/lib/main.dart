@@ -1,13 +1,17 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
 
-import 'package:telemetrydecksdk/telemetry_manager_configuration.dart';
+import 'package:flutter/material.dart';
 import 'package:telemetrydecksdk/telemetrydecksdk.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  Telemetrydecksdk.start(TelemetryManagerConfiguration(
-      appID: "your TelemetryDeck App ID", debug: true, testMode: true));
+  Telemetrydecksdk.start(
+    const TelemetryManagerConfiguration(
+      appID: "A4CAE055-857C-45F8-8C6B-335E3617050D",
+      debug: true,
+      testMode: true,
+    ),
+  );
   runApp(const MyApp());
 }
 
@@ -19,8 +23,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final _telemetrydecksdkPlugin = Telemetrydecksdk();
-
   @override
   void initState() {
     super.initState();
@@ -47,16 +49,21 @@ class _MyAppState extends State<MyApp> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               const Text('Hello !'),
-              const SizedBox(height: 10),
+              const SizedBox(height: 10), // Adds some space between the text and the button
               ElevatedButton(
                 onPressed: () {
                   // Send a signal type to TelemetryDeck
-                  _telemetrydecksdkPlugin.send("button_clicked");
+                  Telemetrydecksdk.send("button_clicked");
                   // You can optionally attach parameters to the signal
-                  _telemetrydecksdkPlugin.send("button_clicked",
-                      clientUser: "user");
-                  _telemetrydecksdkPlugin.send("button_clicked",
-                      additionalPayload: {"mapKey": "mapValue"});
+                  Telemetrydecksdk.send(
+                    "button_clicked",
+                    clientUser: "user",
+                  );
+                  // Provide additional payload information
+                  Telemetrydecksdk.send(
+                    "button_clicked",
+                    additionalPayload: {"mapKey": "mapValue"},
+                  );
                 },
                 child: const Text('Press Me'),
               ),
