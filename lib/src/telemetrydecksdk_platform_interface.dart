@@ -47,4 +47,15 @@ abstract class TelemetrydecksdkPlatform extends PlatformInterface {
   Future<void> updateDefaultUser(String clientUser) async {
     throw UnimplementedError('updateDefaultUser() has not been implemented.');
   }
+
+  Future<void> navigate(String sourcePath, String destinationPath,
+      {String? clientUser}) async {
+    throw UnimplementedError('navigate() has not been implemented.');
+  }
+
+  Future<void> navigateToDestination(String destinationPath,
+      {String? clientUser}) async {
+    throw UnimplementedError(
+        'navigateToDestination() has not been implemented.');
+  }
 }

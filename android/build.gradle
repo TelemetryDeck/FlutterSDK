@@ -52,7 +52,7 @@ android {
     }
 
     dependencies {
-        implementation 'com.github.TelemetryDeck:KotlinSDK:+'
+        implementation 'com.github.TelemetryDeck:KotlinSDK:2.1.+'
         testImplementation 'org.jetbrains.kotlin:kotlin-test'
         testImplementation 'org.mockito:mockito-core:5.0.0'
     }

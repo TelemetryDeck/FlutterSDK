@@ -36,7 +36,7 @@ class TelemetrydecksdkPlugin: FlutterPlugin, MethodCallHandler {
     if (call.method == "start") {
       nativeInitialize(call, result)
     } else if (call.method == "stop") {
-      nativeStop(call, result)
+      nativeStop(result)
     } else if (call.method == "send") {
       // this maps to the queue method which aligns with the behaviour of the iOS SDK
       nativeQueue(call, result)
@@ -45,12 +45,61 @@ class TelemetrydecksdkPlugin: FlutterPlugin, MethodCallHandler {
       result.success(null)
     } else if (call.method == "updateDefaultUser") {
       nativeUpdateDefaultUser(call, result)
+    }else if (call.method == "navigate") {
+      nativeNavigate(call, result)
+    }else if (call.method == "navigateToDestination") {
+      nativeNavigateDestination(call, result)
     } else {
       result.notImplemented()
     }
   }
 
-  private fun nativeStop(call: MethodCall, result: Result) {
+  /**
+   * Send a signal that represents a navigation event with a source and a destination.
+   *
+   * @see <a href="https://telemetrydeck.com/docs/articles/navigation-signals/">Navigation Signals</a>
+   * */
+  private fun nativeNavigate(call: MethodCall, result: Result) {
+    val sourcePath = call.argument<String>("sourcePath")
+    val destinationPath = call.argument<String>("destinationPath")
+    val clientUser = call.argument<String?>("clientUser")
+
+    if (sourcePath == null || destinationPath == null) {
+      result.error("INVALID_ARGUMENT", "sourcePath and destinationPath are required", null)
+      return
+    }
+
+    coroutineScope.launch {
+      TelemetryManager.navigate(sourcePath, destinationPath, clientUser)
+      withContext(Dispatchers.Main) {
+        result.success(null)
+      }
+    }
+  }
+
+  /**
+   * Send a signal that represents a navigation event with a destination and a default source.
+   *
+   * @see <a href="https://telemetrydeck.com/docs/articles/navigation-signals/">Navigation Signals</a>
+   * */
+  private fun nativeNavigateDestination(call: MethodCall, result: Result) {
+    val destinationPath = call.argument<String>("destinationPath")
+    val clientUser = call.argument<String?>("clientUser")
+
+    if (destinationPath == null) {
+      result.error("INVALID_ARGUMENT", "destinationPath is required", null)
+      return
+    }
+
+    coroutineScope.launch {
+      TelemetryManager.navigate(destinationPath, clientUser)
+      withContext(Dispatchers.Main) {
+        result.success(null)
+      }
+    }
+  }
+
+  private fun nativeStop(result: Result) {
     coroutineScope.launch {
       TelemetryManager.stop()
       withContext(Dispatchers.Main) {
@@ -87,6 +136,8 @@ class TelemetrydecksdkPlugin: FlutterPlugin, MethodCallHandler {
           result.success(null)
         }
       }
+    } else {
+      result.error("INVALID_ARGUMENT", "signalType must be provided", null)
     }
   }
 
