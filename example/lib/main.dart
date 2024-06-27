@@ -7,7 +7,7 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   Telemetrydecksdk.start(
     const TelemetryManagerConfiguration(
-      appID: "A4CAE055-857C-45F8-8C6B-335E3617050D",
+      appID: "22385F1C-3699-4F04-9D63-24CC0B2E62D8",
       debug: true,
       testMode: true,
     ),
@@ -49,7 +49,9 @@ class _MyAppState extends State<MyApp> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               const Text('Hello !'),
-              const SizedBox(height: 10), // Adds some space between the text and the button
+              const SizedBox(
+                  height:
+                      10), // Adds some space between the text and the button
               ElevatedButton(
                 onPressed: () {
                   // Send a signal type to TelemetryDeck
@@ -64,6 +66,13 @@ class _MyAppState extends State<MyApp> {
                     "button_clicked",
                     additionalPayload: {"mapKey": "mapValue"},
                   );
+                  // Signal navigation
+                  Telemetrydecksdk.navigate("home", "settings");
+
+                  Telemetrydecksdk.navigate("settings", "about",
+                      clientUser: "custom_user");
+
+                  Telemetrydecksdk.navigateToDestination("landing");
                 },
                 child: const Text('Press Me'),
               ),
