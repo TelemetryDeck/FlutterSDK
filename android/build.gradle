@@ -2,7 +2,7 @@ group 'com.telemetrydeck.telemetrydecksdk'
 version '1.0-SNAPSHOT'
 
 buildscript {
-    ext.kotlin_version = '1.7.10'
+    ext.kotlin_version = '1.9.24'
     repositories {
         google()
         mavenCentral()
@@ -52,7 +52,7 @@ android {
     }
 
     dependencies {
-        implementation 'com.github.TelemetryDeck:KotlinSDK:2.1.+'
+        implementation 'com.github.TelemetryDeck:KotlinSDK:2.+'
         testImplementation 'org.jetbrains.kotlin:kotlin-test'
         testImplementation 'org.mockito:mockito-core:5.0.0'
     }
