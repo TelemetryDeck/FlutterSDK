@@ -22,9 +22,46 @@ public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
             result(nil)
         case "updateDefaultUser":
             nativeUpdateDefaultUser(call, result: result)
+        case "navigate":
+            nativeNavigate(call, result: result)
+        case "navigateToDestination":
+            nativeNavigateDestination(call, result: result)
         default:
             result(FlutterMethodNotImplemented)
         }
+    }
+    
+    /**
+     * Send a signal that represents a navigation event with a source and a destination.
+     *
+     * @see <a href="https://telemetrydeck.com/docs/articles/navigation-signals/">Navigation Signals</a>
+     * */
+    private func nativeNavigate(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        guard let arguments = call.arguments as? [String: Any],
+              let sourcePath = arguments["sourcePath"] as? String,
+              let destinationPath = arguments["destinationPath"] as? String else {
+            result(FlutterError(code: "INVALID_ARGUMENT", message: "sourcePath and destinationPath are required", details: nil))
+            return
+        }
+        let clientUser = arguments["clientUser"] as? String
+        TelemetryDeck.navigationPathChanged(from: sourcePath, to: destinationPath, customUserID: clientUser)
+        result(nil)
+    }
+    
+    /**
+     * Send a signal that represents a navigation event with a destination and a default source.
+     *
+     * @see <a href="https://telemetrydeck.com/docs/articles/navigation-signals/">Navigation Signals</a>
+     * */
+    private func nativeNavigateDestination(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        guard let arguments = call.arguments as? [String: Any],
+              let destinationPath = arguments["destinationPath"] as? String else {
+            result(FlutterError(code: "INVALID_ARGUMENT", message: "destinationPath are required", details: nil))
+            return
+        }
+        let clientUser = arguments["clientUser"] as? String
+        TelemetryDeck.navigationPathChanged(to: destinationPath, customUserID: clientUser)
+        result(nil)
     }
     
     private func nativeStop(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
