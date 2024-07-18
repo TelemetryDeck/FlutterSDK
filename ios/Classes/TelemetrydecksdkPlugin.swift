@@ -1,6 +1,6 @@
 import Flutter
 import UIKit
-import TelemetryClient
+import TelemetryDeck
 
 public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
     public static func register(with registrar: FlutterPluginRegistrar) {
