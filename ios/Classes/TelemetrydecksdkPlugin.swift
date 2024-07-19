@@ -18,7 +18,7 @@ public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
         case "send":
             nativeQueue(call, result: result)
         case "generateNewSession":
-            TelemetryManager.generateNewSession()
+            TelemetryDeck.generateNewSession()
             result(nil)
         case "updateDefaultUser":
             nativeUpdateDefaultUser(call, result: result)
@@ -65,12 +65,12 @@ public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
     }
     
     private func nativeStop(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        TelemetryManager.terminate()
+        TelemetryDeck.terminate()
         result(nil)
     }
     
     private func nativeUpdateDefaultUser(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        TelemetryManager.updateDefaultUser(to: call.arguments as? String)
+        TelemetryDeck.updateDefaultUserID(to: call.arguments as? String)
         result(nil)
     }
     
@@ -85,7 +85,7 @@ public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
         
         // do not attempt to send signals if the client is stopped
         if TelemetryManager.isInitialized {
-            TelemetryManager.send(signalType, for: clientUser, with: additionalPayload)
+            TelemetryDeck.signal(signalType, parameters: additionalPayload, customUserID: clientUser)
         }
         
         result(nil)
@@ -128,7 +128,7 @@ public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
             configuration.testMode = arguments["testMode"] as? Bool == true
         }
         
-        TelemetryManager.initialize(with: configuration)
+        TelemetryDeck.initialize(config: configuration)
         
         result(nil)
     }
