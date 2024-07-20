@@ -1,3 +1,9 @@
+## 0.5.0
+
+- https://github.com/TelemetryDeck/FlutterSDK/releases/tag/0.5.0
+- Add support for navigation signals
+- Upgrades to the latest version of the Swift and Kotlin SDKs
+
 ## 0.4.0
 
 - https://github.com/TelemetryDeck/FlutterSDK/releases/tag/0.4.0
