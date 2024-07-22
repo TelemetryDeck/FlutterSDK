@@ -45,4 +45,23 @@ class MethodChannelTelemetrydecksdk extends TelemetrydecksdkPlatform {
   Future<void> updateDefaultUser(String clientUser) async {
     await methodChannel.invokeMethod<void>('updateDefaultUser', clientUser);
   }
+
+  @override
+  Future<void> navigate(String sourcePath, String destinationPath,
+      {String? clientUser}) async {
+    await methodChannel.invokeMethod<void>('navigate', {
+      'sourcePath': sourcePath,
+      'destinationPath': destinationPath,
+      'clientUser': clientUser,
+    });
+  }
+
+  @override
+  Future<void> navigateToDestination(String destinationPath,
+      {String? clientUser}) async {
+    await methodChannel.invokeMethod<void>('navigateToDestination', {
+      'destinationPath': destinationPath,
+      'clientUser': clientUser,
+    });
+  }
 }

@@ -8,7 +8,8 @@ class MockTelemetrydecksdkPlatform
     with MockPlatformInterfaceMixin
     implements TelemetrydecksdkPlatform {
   @override
-  Future<void> start(TelemetryManagerConfiguration configuration) => Future.value();
+  Future<void> start(TelemetryManagerConfiguration configuration) =>
+      Future.value();
 
   @override
   Future<void> stop() async => ();
@@ -26,10 +27,21 @@ class MockTelemetrydecksdkPlatform
     Map<String, String>? additionalPayload,
   }) async =>
       ();
+
+  @override
+  Future<void> navigate(String sourcePath, String destinationPath,
+          {String? clientUser}) async =>
+      ();
+
+  @override
+  Future<void> navigateToDestination(String destinationPath,
+          {String? clientUser}) async =>
+      ();
 }
 
 void main() {
-  final TelemetrydecksdkPlatform initialPlatform = TelemetrydecksdkPlatform.instance;
+  final TelemetrydecksdkPlatform initialPlatform =
+      TelemetrydecksdkPlatform.instance;
 
   test('$MethodChannelTelemetrydecksdk is the default instance', () {
     expect(initialPlatform, isInstanceOf<MethodChannelTelemetrydecksdk>());

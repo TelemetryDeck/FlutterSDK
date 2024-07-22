@@ -1,6 +1,6 @@
 import Flutter
 import UIKit
-import TelemetryClient
+import TelemetryDeck
 
 public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -18,22 +18,59 @@ public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
         case "send":
             nativeQueue(call, result: result)
         case "generateNewSession":
-            TelemetryManager.generateNewSession()
+            TelemetryDeck.generateNewSession()
             result(nil)
         case "updateDefaultUser":
             nativeUpdateDefaultUser(call, result: result)
+        case "navigate":
+            nativeNavigate(call, result: result)
+        case "navigateToDestination":
+            nativeNavigateDestination(call, result: result)
         default:
             result(FlutterMethodNotImplemented)
         }
     }
     
+    /**
+     * Send a signal that represents a navigation event with a source and a destination.
+     *
+     * @see <a href="https://telemetrydeck.com/docs/articles/navigation-signals/">Navigation Signals</a>
+     * */
+    private func nativeNavigate(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        guard let arguments = call.arguments as? [String: Any],
+              let sourcePath = arguments["sourcePath"] as? String,
+              let destinationPath = arguments["destinationPath"] as? String else {
+            result(FlutterError(code: "INVALID_ARGUMENT", message: "sourcePath and destinationPath are required", details: nil))
+            return
+        }
+        let clientUser = arguments["clientUser"] as? String
+        TelemetryDeck.navigationPathChanged(from: sourcePath, to: destinationPath, customUserID: clientUser)
+        result(nil)
+    }
+    
+    /**
+     * Send a signal that represents a navigation event with a destination and a default source.
+     *
+     * @see <a href="https://telemetrydeck.com/docs/articles/navigation-signals/">Navigation Signals</a>
+     * */
+    private func nativeNavigateDestination(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        guard let arguments = call.arguments as? [String: Any],
+              let destinationPath = arguments["destinationPath"] as? String else {
+            result(FlutterError(code: "INVALID_ARGUMENT", message: "destinationPath are required", details: nil))
+            return
+        }
+        let clientUser = arguments["clientUser"] as? String
+        TelemetryDeck.navigationPathChanged(to: destinationPath, customUserID: clientUser)
+        result(nil)
+    }
+    
     private func nativeStop(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        TelemetryManager.terminate()
+        TelemetryDeck.terminate()
         result(nil)
     }
     
     private func nativeUpdateDefaultUser(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        TelemetryManager.updateDefaultUser(to: call.arguments as? String)
+        TelemetryDeck.updateDefaultUserID(to: call.arguments as? String)
         result(nil)
     }
     
@@ -48,7 +85,7 @@ public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
         
         // do not attempt to send signals if the client is stopped
         if TelemetryManager.isInitialized {
-            TelemetryManager.send(signalType, for: clientUser, with: additionalPayload)
+            TelemetryDeck.signal(signalType, parameters: additionalPayload, customUserID: clientUser)
         }
         
         result(nil)
@@ -91,7 +128,7 @@ public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
             configuration.testMode = arguments["testMode"] as? Bool == true
         }
         
-        TelemetryManager.initialize(with: configuration)
+        TelemetryDeck.initialize(config: configuration)
         
         result(nil)
     }

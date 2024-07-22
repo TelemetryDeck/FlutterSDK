@@ -43,4 +43,16 @@ abstract class Telemetrydecksdk {
   static Future<void> updateDefaultUser(String clientUser) async {
     await TelemetrydecksdkPlatform.instance.updateDefaultUser(clientUser);
   }
+
+  static Future<void> navigate(String sourcePath, String destinationPath,
+      {String? clientUser}) async {
+    await TelemetrydecksdkPlatform.instance
+        .navigate(sourcePath, destinationPath, clientUser: clientUser);
+  }
+
+  static Future<void> navigateToDestination(String destinationPath,
+      {String? clientUser}) async {
+    await TelemetrydecksdkPlatform.instance
+        .navigateToDestination(destinationPath, clientUser: clientUser);
+  }
 }

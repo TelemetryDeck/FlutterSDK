@@ -91,6 +91,25 @@ Telemetrydecksdk.stop()
 
 In order to restart sending events, you will need to call the `start` method again.
 
+## Navigation signals
+
+A navigation signal is a regular TelemetryDeck signal of type `TelemetryDeck.Navigation.pathChanged`. Automatic navigation tracking is available using the `navigate` and `navigateToDestination` methods:
+
+```dart
+Telemetrydecksdk.navigate("screen1", "screen2");
+
+Telemetrydecksdk.navigateToDestination("screen3");
+```
+
+Both methods allow for a custom `clientUser` to be passed as an optional parameter:
+
+```dart
+Telemetrydecksdk.navigate("screen1", "screen2",
+                      clientUser: "custom_user");
+```
+
+For more information, please check [this post](https://telemetrydeck.com/docs/articles/navigation-signals/).
+
 ## Test mode
 
 If your app's build configuration is set to "Debug", all signals sent will be marked as testing signals. In the Telemetry Viewer app, activate **Test Mode** to see those.
