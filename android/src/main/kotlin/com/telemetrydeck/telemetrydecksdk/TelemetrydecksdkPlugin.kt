@@ -5,7 +5,6 @@ import android.content.Context
 import com.telemetrydeck.sdk.EnvironmentMetadataProvider
 import com.telemetrydeck.sdk.SessionProvider
 import com.telemetrydeck.sdk.TelemetryManager
-
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -34,34 +33,41 @@ class TelemetrydecksdkPlugin : FlutterPlugin, MethodCallHandler {
     }
 
     override fun onMethodCall(call: MethodCall, result: Result) {
-      when (call.method) {
-          "start" -> {
-              nativeInitialize(call, result)
-          }
-          "stop" -> {
-              nativeStop(result)
-          }
-          "send" -> {
-              // this maps to the queue method which aligns with the behaviour of the iOS SDK
-              nativeQueue(call, result)
-          }
-          "generateNewSession" -> {
-              TelemetryManager.newSession()
-              result.success(null)
-          }
-          "updateDefaultUser" -> {
-              nativeUpdateDefaultUser(call, result)
-          }
-          "navigate" -> {
-              nativeNavigate(call, result)
-          }
-          "navigateToDestination" -> {
-              nativeNavigateDestination(call, result)
-          }
-          else -> {
-              result.notImplemented()
-          }
-      }
+        when (call.method) {
+            "start" -> {
+                nativeInitialize(call, result)
+            }
+
+            "stop" -> {
+                nativeStop(result)
+            }
+
+            "send" -> {
+                // this maps to the queue method which aligns with the behaviour of the iOS SDK
+                nativeQueue(call, result)
+            }
+
+            "generateNewSession" -> {
+                TelemetryManager.newSession()
+                result.success(null)
+            }
+
+            "updateDefaultUser" -> {
+                nativeUpdateDefaultUser(call, result)
+            }
+
+            "navigate" -> {
+                nativeNavigate(call, result)
+            }
+
+            "navigateToDestination" -> {
+                nativeNavigateDestination(call, result)
+            }
+
+            else -> {
+                result.notImplemented()
+            }
+        }
     }
 
     /**
@@ -110,12 +116,8 @@ class TelemetrydecksdkPlugin : FlutterPlugin, MethodCallHandler {
     }
 
     private fun nativeStop(result: Result) {
-        coroutineScope.launch {
-            TelemetryManager.stop()
-            withContext(Dispatchers.Main) {
-                result.success(null)
-            }
-        }
+        TelemetryManager.stop()
+        result.success(null)
     }
 
     private fun nativeUpdateDefaultUser(
