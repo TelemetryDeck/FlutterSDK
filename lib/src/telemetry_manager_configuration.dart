@@ -16,8 +16,8 @@ class TelemetryManagerConfiguration {
   /// Default is `false`.
   final bool? debug;
 
-  /// If `true` any signals sent will be marked as *Testing* signals.
-  /// Default is `false`.
+  /// When `true`, any signals sent will be marked as *Testing* signals.
+  /// If `testMode` is not set explicitly, the corresponding native SDK will automatically determine the value based on whether this is a debug or release build of the app.
   final bool? testMode;
 
   const TelemetryManagerConfiguration({

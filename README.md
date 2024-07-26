@@ -89,7 +89,7 @@ Prevent signals from being sent using the stop method:
 Telemetrydecksdk.stop()
 ```
 
-In order to restart sending events, you will need to call the `start` method again.
+This also prevents previously cached signals from being sent. In order to restart sending events, you will need to call the `start` method again.
 
 ## Navigation signals
 

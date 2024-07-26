@@ -1,3 +1,8 @@
+## 0.5.1
+
+- https://github.com/TelemetryDeck/FlutterSDK/releases/tag/0.5.1
+- Fix a possible crash when calling `stop()`.
+
 ## 0.5.0
 
 - https://github.com/TelemetryDeck/FlutterSDK/releases/tag/0.5.0
