@@ -1,3 +1,8 @@
+## 0.6.0
+
+- https://github.com/TelemetryDeck/FlutterSDK/releases/tag/0.6.0
+- Update coordinates for Kotlin SDK to Maven Central
+
 ## 0.5.1
 
 - https://github.com/TelemetryDeck/FlutterSDK/releases/tag/0.5.1
