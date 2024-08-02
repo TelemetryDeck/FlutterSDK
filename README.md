@@ -16,7 +16,7 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   // configure and start the TelemetryClient
   Telemetrydecksdk.start(
-    TelemetryManagerConfiguration(
+    const TelemetryManagerConfiguration(
       appID: "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
     ),
   );
