@@ -2,9 +2,7 @@ package com.telemetrydeck.telemetrydecksdk
 
 import android.app.Application
 import android.content.Context
-import com.telemetrydeck.sdk.EnvironmentMetadataProvider
-import com.telemetrydeck.sdk.SessionProvider
-import com.telemetrydeck.sdk.TelemetryManager
+import com.telemetrydeck.sdk.TelemetryDeck
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -48,7 +46,7 @@ class TelemetrydecksdkPlugin : FlutterPlugin, MethodCallHandler {
             }
 
             "generateNewSession" -> {
-                TelemetryManager.newSession()
+                TelemetryDeck.newSession()
                 result.success(null)
             }
 
@@ -86,7 +84,7 @@ class TelemetrydecksdkPlugin : FlutterPlugin, MethodCallHandler {
         }
 
         coroutineScope.launch {
-            TelemetryManager.navigate(sourcePath, destinationPath, clientUser)
+            TelemetryDeck.navigate(sourcePath, destinationPath, clientUser)
             withContext(Dispatchers.Main) {
                 result.success(null)
             }
@@ -108,7 +106,7 @@ class TelemetrydecksdkPlugin : FlutterPlugin, MethodCallHandler {
         }
 
         coroutineScope.launch {
-            TelemetryManager.navigate(destinationPath, clientUser)
+            TelemetryDeck.navigate(destinationPath, clientUser)
             withContext(Dispatchers.Main) {
                 result.success(null)
             }
@@ -116,7 +114,7 @@ class TelemetrydecksdkPlugin : FlutterPlugin, MethodCallHandler {
     }
 
     private fun nativeStop(result: Result) {
-        TelemetryManager.stop()
+        TelemetryDeck.stop()
         result.success(null)
     }
 
@@ -127,7 +125,7 @@ class TelemetrydecksdkPlugin : FlutterPlugin, MethodCallHandler {
         val user = call.arguments<String>()
 
         coroutineScope.launch {
-            TelemetryManager.newDefaultUser(user)
+            TelemetryDeck.newDefaultUser(user)
             withContext(Dispatchers.Main) {
                 result.success(null)
             }
@@ -144,7 +142,7 @@ class TelemetrydecksdkPlugin : FlutterPlugin, MethodCallHandler {
             val additionalPayload = call.argument<Map<String, String>>("additionalPayload")
 
             coroutineScope.launch {
-                TelemetryManager.queue(signalType, clientUser, additionalPayload.orEmpty())
+                TelemetryDeck.signal(signalType, clientUser, additionalPayload.orEmpty())
 
                 withContext(Dispatchers.Main) {
                     result.success(null)
@@ -175,9 +173,8 @@ class TelemetrydecksdkPlugin : FlutterPlugin, MethodCallHandler {
 
             // Initialize the client
             // Do not activate the lifecycle provider
-            val builder = TelemetryManager.Builder()
+            val builder = TelemetryDeck.Builder()
                 .appID(appID)
-                .providers(listOf(SessionProvider(), EnvironmentMetadataProvider()))
 
             apiBaseURL?.let {
                 builder.baseURL(it)
@@ -193,7 +190,7 @@ class TelemetrydecksdkPlugin : FlutterPlugin, MethodCallHandler {
             }
 
             val application = applicationContext as Application
-            TelemetryManager.start(application, builder)
+            TelemetryDeck.start(application, builder)
             result.success(null)
         } else {
             result.error("INVALID_ARGUMENT", "Arguments are not a map", null)

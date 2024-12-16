@@ -1,3 +1,10 @@
+## 1.0.0
+
+- https://github.com/TelemetryDeck/FlutterSDK/releases/tag/0.7.0
+- This version introduces the Grand Rename for all native SDKs. You can read more about the motivation behind these changes [here](https://telemetrydeck.com/docs/articles/grand-rename/).
+- Upgrade to the latest Kotlin SDK version introducing a new `TelemetryDeck` class and [more](https://github.com/TelemetryDeck/KotlinSDK/releases/tag/3.0.3).
+- Upgrade to the latest Swift SDK version with [various improvements](https://github.com/TelemetryDeck/SwiftSDK/compare/2.2.4...2.6.1).
+
 ## 0.6.0
 
 - https://github.com/TelemetryDeck/FlutterSDK/releases/tag/0.6.0

@@ -2,10 +2,10 @@ PODS:
   - Flutter (1.0.0)
   - integration_test (0.0.1):
     - Flutter
-  - TelemetryDeck (2.2.4)
+  - TelemetryDeck (2.6.1)
   - telemetrydecksdk (1.0.0):
     - Flutter
-    - TelemetryDeck (~> 2.2.4)
+    - TelemetryDeck (~> 2.6.1)
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
@@ -26,10 +26,10 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  integration_test: ce0a3ffa1de96d1a89ca0ac26fca7ea18a749ef4
-  TelemetryDeck: 0fc448990840a22174112c89e7e9ee484e11ca50
-  telemetrydecksdk: 1c83be11619131dffd4ff1c403f809f4469c8806
+  integration_test: 252f60fa39af5e17c3aa9899d35d908a0721b573
+  TelemetryDeck: d33fc31e687aff7a2e18d770a011453144501193
+  telemetrydecksdk: 0ee3f9f9d66b39e26434fee4d94efc95bf94498e
 
 PODFILE CHECKSUM: 7be2f5f74864d463a8ad433546ed1de7e0f29aef
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2
