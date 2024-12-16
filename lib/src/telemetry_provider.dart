@@ -12,8 +12,11 @@ class TelemetryProvider {
   /// This method will overwrite the default `telemetryClientVersion`.
   Future<Map<String, dynamic>> enrich(Map<String, dynamic>? payload) async {
     Map<String, dynamic> result = payload ?? {};
-    result['telemetryClientVersion'] = "Flutter $telemetryClientVersion";
-    result['dartVersion'] = versionReader.readVersion();
+    result['TelemetryDeck.SDK.name'] = "Flutter SDK";
+    result['TelemetryDeck.SDK.version'] = telemetryClientVersion;
+    result['TelemetryDeck.SDK.nameAndVersion'] =
+        "Flutter SDK $telemetryClientVersion";
+    result['TelemetryDeck.SDK.dartVersion'] = versionReader.readVersion();
 
     return result;
   }

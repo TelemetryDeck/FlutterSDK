@@ -44,8 +44,10 @@ public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
             return
         }
         let clientUser = arguments["clientUser"] as? String
-        TelemetryDeck.navigationPathChanged(from: sourcePath, to: destinationPath, customUserID: clientUser)
-        result(nil)
+        DispatchQueue.main.async {
+            TelemetryDeck.navigationPathChanged(from: sourcePath, to: destinationPath, customUserID: clientUser)
+            result(nil)
+        }
     }
     
     /**
@@ -60,8 +62,10 @@ public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
             return
         }
         let clientUser = arguments["clientUser"] as? String
-        TelemetryDeck.navigationPathChanged(to: destinationPath, customUserID: clientUser)
-        result(nil)
+        DispatchQueue.main.async {
+            TelemetryDeck.navigationPathChanged(to: destinationPath, customUserID: clientUser)
+            result(nil)
+        }
     }
     
     private func nativeStop(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -120,7 +124,7 @@ public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
         if arguments.keys.contains("debug") {
             if arguments["debug"] as? Bool == true {
                 // by default, the library logs with level .info
-                configuration.logHandler = LogHandler.stdout(.debug)
+                configuration.logHandler = LogHandler.standard(.debug)
             }
         }
         

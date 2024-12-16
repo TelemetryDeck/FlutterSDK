@@ -1,6 +1,6 @@
 # TelemetryDeck SDK for Flutter
 
-This package allows your app to send signals to [TelemetryDeck](https://telemetrydeck.com/) using the native TelemetryDeck libraries for [Kotlin](https://github.com/TelemetryDeck/KotlinSDK) and [iOS](https://github.com/TelemetryDeck/SwiftClient).
+This package allows your app to send signals to [TelemetryDeck](https://telemetrydeck.com/) using the native TelemetryDeck libraries for [Kotlin](https://github.com/TelemetryDeck/KotlinSDK) and [iOS](https://github.com/TelemetryDeck/SwiftSDK).
 
 ## Getting started
 
@@ -60,26 +60,17 @@ Telemetrydecksdk.send(
 );
 ```
 
-The Flutter SDK uses the native SDKs for Android and iOS which offer a number of built-in attributes which are submitted with every signal. You can overwrite these attributes by providing a custom value with the same key. For more information on how each value is calcualted, check the corresponding platform library:
+## Environment Parameters
 
-- `majorMinorSystemVersion`
-- `telemetryClientVersion`
-- `isTestFlight` (iOS only)
-- `isDebug`
-- `architecture`
-- `modelName`
-- `isAppStore`
-- `appVersion`
-- `operatingSystem`
-- `systemVersion`
-- `majorSystemVersion`
-- `targetEnvironment`
-- `isSimulator` (iOS only)
-- `platform` (iOS only)
-- `buildNumber` (iOS only)
-- `locale`
-- `dartVersion`
-- `brand` (Android only)
+The Flutter SDK uses the native SDKs for Android and iOS which offer a number of built-in attributes which are submitted with every signal.
+
+You can overwrite these attributes by providing a custom value with the same key. For more information on how each value is calcualted, check the corresponding platform library.
+
+The Flutter SDK adds the following additional attributes:
+
+| Parameter name                  | Description                                 |
+| ------------------------------- | ------------------------------------------- |
+| `TelemetryDeck.SDK.dartVersion` | The Dart language version used during build |
 
 ## Stop sending signals
 
