@@ -1,6 +1,6 @@
 name: telemetrydecksdk
 description: "Flutter SDK for TelemetryDeck, a privacy-conscious analytics service for apps and websites"
-version: 0.6.0
+version: 1.0.0
 homepage: "https://telemetrydeck.com"
 repository: "https://github.com/TelemetryDeck/FlutterSDK"
 issue_tracker: "https://github.com/TelemetryDeck/FlutterSDK/issues"
