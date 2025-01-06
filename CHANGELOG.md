@@ -1,3 +1,9 @@
+## 2.0.1
+
+- https://github.com/TelemetryDeck/FlutterSDK/releases/tag/2.0.1
+- The SwiftSDK for macOS has been updated to the latest version
+- Added the option to provide a custom salt for macOS targets
+
 ## 2.0.0
 
 - https://github.com/TelemetryDeck/FlutterSDK/releases/tag/2.0.0
