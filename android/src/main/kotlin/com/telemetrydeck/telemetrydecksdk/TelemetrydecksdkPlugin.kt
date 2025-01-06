@@ -169,6 +169,7 @@ class TelemetrydecksdkPlugin : FlutterPlugin, MethodCallHandler {
             val defaultUser = arguments["defaultUser"] as? String?
             val debug = arguments["debug"] as? Boolean
             val testMode = arguments["testMode"] as? Boolean
+            val salt = arguments["salt"] as? String?
 
 
             // Initialize the client
@@ -187,6 +188,9 @@ class TelemetrydecksdkPlugin : FlutterPlugin, MethodCallHandler {
             }
             testMode?.let {
                 builder.testMode(it)
+            }
+            salt?.let {
+                builder.salt(it)
             }
 
             val application = applicationContext as Application

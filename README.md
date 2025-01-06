@@ -25,11 +25,11 @@ void main() {
 }
 ```
 
-## Permission for internet access
+### Permission for internet access
 
 Sending signals requires access to the internet so the following permissions should be granted. For more information, you can check [Flutter Cross-platform HTTP networking ](https://docs.flutter.dev/data-and-backend/networking).
 
-### Android
+#### Android
 
 Change the app's `AndroidManifest.xml` to include:
 
@@ -37,7 +37,7 @@ Change the app's `AndroidManifest.xml` to include:
 <uses-permission android:name="android.permission.INTERNET" />
 ```
 
-### macOS
+#### macOS
 
 Set the `com.apple.security.network.client` entitlement to `true` in the `macos/Runner/DebugProfile.entitlements` and `macos/Runner/Release.entitlements` files. You can also do this in Xcode by selecting the `macos` target, then the `Signing & Capabilities` tab, and checking `Outgoing connections (Client)` for both the Release and Debug targets of your app.
 
@@ -64,7 +64,7 @@ Telemetrydecksdk.send(
 
 The Flutter SDK uses the native SDKs for Android and iOS which offer a number of built-in attributes which are submitted with every signal.
 
-You can overwrite these attributes by providing a custom value with the same key. For more information on how each value is calcualted, check the corresponding platform library.
+For more information on how each value is calcualted, check the corresponding platform library.
 
 The Flutter SDK adds the following additional attributes:
 
@@ -117,6 +117,23 @@ Telemetrydecksdk.start(
 ```
 
 [Getting started with Test Mode](https://telemetrydeck.com/docs/articles/test-mode/)
+
+## Custom Salt
+
+By default, user identifiers are hashed by the TelemetryDeck SDK, and then sent to the Ingestion API, where we'll add a salt to the received identifier and hash it again.
+
+This is enough for most use cases, but if you want to extra privacy conscious, you can add in you own salt on the client side. The TelemetryDeck SDK will append the salt to all user identifers before hashing them and sending them to us.
+
+If you'd like to use a custom salt, you can do so by passing it on to the starting `TelemetryManagerConfiguration`:
+
+```dart
+Telemetrydecksdk.start(
+  TelemetryManagerConfiguration(
+    appID: "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
+    salt: "<A RANDOM STRING>",
+  ),
+);
+```
 
 ## Custom Server
 
