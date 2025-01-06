@@ -20,13 +20,15 @@ class TelemetryManagerConfiguration {
   /// If `testMode` is not set explicitly, the corresponding native SDK will automatically determine the value based on whether this is a debug or release build of the app.
   final bool? testMode;
 
-  const TelemetryManagerConfiguration({
-    required this.appID,
-    this.apiBaseURL,
-    this.defaultUser,
-    this.debug,
-    this.testMode,
-  });
+  final String? salt;
+
+  const TelemetryManagerConfiguration(
+      {required this.appID,
+      this.apiBaseURL,
+      this.defaultUser,
+      this.debug,
+      this.testMode,
+      this.salt});
 
   /// to map
   Map<String, dynamic> toMap() {
@@ -36,6 +38,7 @@ class TelemetryManagerConfiguration {
       'defaultUser': defaultUser,
       'debug': debug,
       'testMode': testMode,
+      'salt': salt
     };
   }
 }

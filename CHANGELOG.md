@@ -1,7 +1,8 @@
 ## 2.0.0
 
 - https://github.com/TelemetryDeck/FlutterSDK/releases/tag/2.0.0
-- The KotlinSDK has been updated to [version 4.0.0](https://github.com/TelemetryDeck/KotlinSDK/releases/tag/4.0.0) introducing automatic generation of random user identifiers ([link](https://github.com/TelemetryDeck/KotlinSDK/issues/14))
+- The KotlinSDK has been updated to [version 4.0.2](https://github.com/TelemetryDeck/KotlinSDK/releases/tag/4.0.2) introducing automatic generation of random user identifiers ([link](https://github.com/TelemetryDeck/KotlinSDK/issues/14)) and other improvements.
+- Added the option to provide a custom salt for consistent user identifiers.
 
 ## 1.0.0
 

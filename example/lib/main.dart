@@ -7,10 +7,9 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   Telemetrydecksdk.start(
     const TelemetryManagerConfiguration(
-      appID: "22385F1C-3699-4F04-9D63-24CC0B2E62D8",
-      debug: true,
-      testMode: true,
-    ),
+        appID: "22385F1C-3699-4F04-9D63-24CC0B2E62D8",
+        debug: true,
+        testMode: true),
   );
   runApp(const MyApp());
 }

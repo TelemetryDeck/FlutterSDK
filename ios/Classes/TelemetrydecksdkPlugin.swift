@@ -113,8 +113,10 @@ public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
             baseURL = url
         }
         
+        
+        let salt =  arguments["salt"] as? String
         let configuration = TelemetryManagerConfiguration.init(
-            appID: appID, salt: nil, baseURL: baseURL)
+            appID: appID, salt: salt, baseURL: baseURL)
         
         // other optional params
         if arguments.keys.contains("defaultUser") {
