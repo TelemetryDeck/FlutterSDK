@@ -8,13 +8,13 @@ This package allows your app to send signals to [TelemetryDeck](https://telemetr
 
 - Follow the installing instructions on [pub.dev](https://pub.dev/packages/telemetrydecksdk/install).
 
-- Initialize the TelemetryClient:
+- Initialize the client:
 
 ```dart
 void main() {
   // ensure the platform channels are available
   WidgetsFlutterBinding.ensureInitialized();
-  // configure and start the TelemetryClient
+  // configure and start the client
   Telemetrydecksdk.start(
     const TelemetryManagerConfiguration(
       appID: "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
