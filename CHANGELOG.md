@@ -1,3 +1,14 @@
+## 2.1.0
+
+- https://github.com/TelemetryDeck/FlutterSDK/releases/tag/2.1.0
+- The SwiftSDK for macOS has been updated to version [2.7.0](https://github.com/TelemetryDeck/SwiftSDK/releases/tag/2.7.0)
+- The SwiftSDK for iOS has been updated to version [2.7.0](https://github.com/TelemetryDeck/SwiftSDK/releases/tag/2.7.0)
+- The KotlinSDK for Android has been updated to [4.1.0](https://github.com/TelemetryDeck/KotlinSDK/releases/tag/4.1.0)
+
+### Notes
+
+- The minimum Kotlin compiler version has been raised to [2.0.21](https://kotlinlang.org/docs/releases.html#release-details) and can be configured by setting `ext.kotlin_version = '2.0.21'` in your `build.gradle` file.
+
 ## 2.0.1
 
 - https://github.com/TelemetryDeck/FlutterSDK/releases/tag/2.0.1
