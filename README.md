@@ -82,6 +82,30 @@ Telemetrydecksdk.stop()
 
 This also prevents previously cached signals from being sent. In order to restart sending events, you will need to call the `start` method again.
 
+## Default Parameters
+
+If there are parameters you would like to include with every outgoing signal, you can configure `Telemetrydecksdk` to do so instead of passing them with every call:
+
+```dart
+const TelemetryManagerConfiguration(
+  // ...
+        defaultParameters: {"ParameterName": "ParameterValue"}
+        ),
+```
+
+## Default Prefix
+
+If you find yourself prepending the same prefix for to your custom signals or parameters,
+you can optionally configure `Telemetrydecksdk` to do this for you:
+
+```dart
+const TelemetryManagerConfiguration(
+  // ...
+        defaultParameterPrefix: "DemoApp.Parameter.",
+        defaultSignalPrefix: "DemoApp.Signal.",
+        ),
+```
+
 ## Navigation signals
 
 A navigation signal is a regular TelemetryDeck signal of type `TelemetryDeck.Navigation.pathChanged`. Automatic navigation tracking is available using the `navigate` and `navigateToDestination` methods:
