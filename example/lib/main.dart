@@ -8,6 +8,9 @@ void main() {
   Telemetrydecksdk.start(
     const TelemetryManagerConfiguration(
         appID: "22385F1C-3699-4F04-9D63-24CC0B2E62D8",
+        defaultParameterPrefix: "DemoApp.Parameter.",
+        defaultSignalPrefix: "DemoApp.Signal.",
+        defaultParameters: {"ParameterName": "ParameterValue"},
         debug: true,
         testMode: true),
   );

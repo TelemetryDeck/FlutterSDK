@@ -22,13 +22,20 @@ class TelemetryManagerConfiguration {
 
   final String? salt;
 
+  final String? defaultSignalPrefix;
+  final String? defaultParameterPrefix;
+  final Map<String, String>? defaultParameters;
+
   const TelemetryManagerConfiguration(
       {required this.appID,
       this.apiBaseURL,
       this.defaultUser,
       this.debug,
       this.testMode,
-      this.salt});
+      this.salt,
+      this.defaultSignalPrefix,
+      this.defaultParameterPrefix,
+      this.defaultParameters});
 
   /// to map
   Map<String, dynamic> toMap() {
@@ -38,7 +45,10 @@ class TelemetryManagerConfiguration {
       'defaultUser': defaultUser,
       'debug': debug,
       'testMode': testMode,
-      'salt': salt
+      'salt': salt,
+      'defaultSignalPrefix': defaultSignalPrefix,
+      'defaultParameterPrefix': defaultParameterPrefix,
+      'defaultParameters': defaultParameters
     };
   }
 }
