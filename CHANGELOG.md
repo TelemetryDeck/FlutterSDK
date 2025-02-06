@@ -1,8 +1,11 @@
 ## 2.1.0
 
 - https://github.com/TelemetryDeck/FlutterSDK/releases/tag/2.1.0
-- The SwiftSDK for macOS has been updated to version [2.7.0](https://github.com/TelemetryDeck/SwiftSDK/releases/tag/2.7.0)
-- The SwiftSDK for iOS has been updated to version [2.7.0](https://github.com/TelemetryDeck/SwiftSDK/releases/tag/2.7.0)
+
+- It's now possible to set defaultSignalPrefix, defaultParameterPrefix as well as a map of defaultParameters in the `TelemetryManagerConfiguration` class. This allows you to set default values for all signals and parameters sent by the SDK.
+
+- The SwiftSDK for macOS has been updated to version [2.7.2](https://github.com/TelemetryDeck/SwiftSDK/releases/tag/2.7.2)
+- The SwiftSDK for iOS has been updated to version [2.7.2](https://github.com/TelemetryDeck/SwiftSDK/releases/tag/2.7.2)
 - The KotlinSDK for Android has been updated to [4.1.0](https://github.com/TelemetryDeck/KotlinSDK/releases/tag/4.1.0)
 
 ### Notes
