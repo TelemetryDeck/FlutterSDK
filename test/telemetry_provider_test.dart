@@ -10,8 +10,12 @@ void main() {
     // assert the keys 'key1' is present in the result
     expect(
       result,
-      containsPair('telemetryClientVersion', "Flutter $telemetryClientVersion"),
+      containsPair('TelemetryDeck.SDK.version', telemetryClientVersion),
     );
-    expect(result, containsPair('dartVersion', isNotNull));
+    expect(
+      result,
+      containsPair('TelemetryDeck.SDK.name', 'Flutter SDK'),
+    );
+    expect(result, containsPair('TelemetryDeck.SDK.dartVersion', isNotNull));
   });
 }

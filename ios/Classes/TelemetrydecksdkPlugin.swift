@@ -134,6 +134,19 @@ public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
             configuration.testMode = arguments["testMode"] as? Bool == true
         }
         
+        if arguments.keys.contains("defaultSignalPrefix") {
+            configuration.defaultSignalPrefix = arguments["defaultSignalPrefix"] as? String
+        }
+        
+        if arguments.keys.contains("defaultParameterPrefix") {
+            configuration.defaultParameterPrefix = arguments["defaultParameterPrefix"] as? String
+        }
+        
+        if arguments.keys.contains("defaultParameters") {
+            let finalValues = arguments["defaultParameters"] as? [String : String] ?? [:]
+            configuration.defaultParameters = { finalValues }
+        }
+        
         TelemetryDeck.initialize(config: configuration)
         
         result(nil)

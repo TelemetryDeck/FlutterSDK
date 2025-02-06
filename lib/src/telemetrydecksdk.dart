@@ -11,7 +11,16 @@ abstract class Telemetrydecksdk {
   static const _telemetryProvider = TelemetryProvider();
 
   static Future<void> start(TelemetryManagerConfiguration configuration) async {
-    await TelemetrydecksdkPlatform.instance.start(configuration);
+    final enrichedDefaultParameters = await _telemetryProvider.enrich(
+      configuration.defaultParameters,
+    );
+    final stringifiedeParams = enrichedDefaultParameters.map(
+      (key, value) => MapEntry(key, value.toString()),
+    );
+    final enrichedConfiguration = configuration.copyWith(
+      defaultParameters: stringifiedeParams,
+    );
+    await TelemetrydecksdkPlatform.instance.start(enrichedConfiguration);
   }
 
   static Future<void> stop() async {
@@ -23,7 +32,7 @@ abstract class Telemetrydecksdk {
     String? clientUser,
     Map<String, dynamic>? additionalPayload,
   }) async {
-    final payload = await _telemetryProvider.enrich(additionalPayload);
+    final payload = additionalPayload ?? {};
 
     final stringifiedPayload = payload.map(
       (key, value) => MapEntry(key, value.toString()),

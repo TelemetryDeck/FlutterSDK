@@ -3,6 +3,8 @@ package com.telemetrydeck.telemetrydecksdk
 import android.app.Application
 import android.content.Context
 import com.telemetrydeck.sdk.TelemetryDeck
+import com.telemetrydeck.sdk.providers.DefaultParameterProvider
+import com.telemetrydeck.sdk.providers.DefaultPrefixProvider
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -170,6 +172,9 @@ class TelemetrydecksdkPlugin : FlutterPlugin, MethodCallHandler {
             val debug = arguments["debug"] as? Boolean
             val testMode = arguments["testMode"] as? Boolean
             val salt = arguments["salt"] as? String?
+            val defaultSignalPrefix = arguments["defaultSignalPrefix"] as? String?
+            val defaultParameterPrefix = arguments["defaultParameterPrefix"] as? String?
+            val defaultParameters = arguments["defaultParameters"] as? Map<String, String>?
 
 
             // Initialize the client
@@ -191,6 +196,14 @@ class TelemetrydecksdkPlugin : FlutterPlugin, MethodCallHandler {
             }
             salt?.let {
                 builder.salt(it)
+            }
+
+            if (defaultSignalPrefix != null || defaultParameterPrefix != null) {
+                builder.addProvider(DefaultPrefixProvider(defaultSignalPrefix, defaultParameterPrefix))
+            }
+
+            if (defaultParameters != null) {
+                builder.addProvider(DefaultParameterProvider(defaultParameters))
             }
 
             val application = applicationContext as Application
