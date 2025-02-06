@@ -11,7 +11,7 @@ class TelemetryProvider {
   /// Adds Flutter specific payload attributes to outgoing signals before passing them to the native platform API.
   /// This method will overwrite the default `telemetryClientVersion`.
   Future<Map<String, dynamic>> enrich(Map<String, dynamic>? payload) async {
-    Map<String, dynamic> result = payload ?? {};
+    Map<String, dynamic> result = Map<String, dynamic>.from(payload ?? {});
     result['TelemetryDeck.SDK.name'] = "Flutter SDK";
     result['TelemetryDeck.SDK.version'] = telemetryClientVersion;
     result['TelemetryDeck.SDK.nameAndVersion'] =

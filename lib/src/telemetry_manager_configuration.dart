@@ -51,4 +51,20 @@ class TelemetryManagerConfiguration {
       'defaultParameters': defaultParameters
     };
   }
+
+  TelemetryManagerConfiguration copyWith({
+    Map<String, String>? defaultParameters,
+  }) {
+    return TelemetryManagerConfiguration(
+      appID: appID,
+      apiBaseURL: apiBaseURL,
+      defaultUser: defaultUser,
+      debug: debug,
+      testMode: testMode,
+      salt: salt,
+      defaultSignalPrefix: defaultSignalPrefix,
+      defaultParameterPrefix: defaultParameterPrefix,
+      defaultParameters: defaultParameters ?? this.defaultParameters,
+    );
+  }
 }
