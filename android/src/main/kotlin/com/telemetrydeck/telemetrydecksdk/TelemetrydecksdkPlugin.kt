@@ -198,6 +198,9 @@ class TelemetrydecksdkPlugin : FlutterPlugin, MethodCallHandler {
             salt?.let {
                 builder.salt(it)
             }
+            namespace?.let {
+                builder.namespace(it)
+            }
 
             if (defaultSignalPrefix != null || defaultParameterPrefix != null) {
                 builder.addProvider(DefaultPrefixProvider(defaultSignalPrefix, defaultParameterPrefix))
