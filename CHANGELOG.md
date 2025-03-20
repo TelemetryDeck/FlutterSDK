@@ -6,7 +6,7 @@
 
 - The SwiftSDK for macOS has been updated to version [2.9.1](https://github.com/TelemetryDeck/SwiftSDK/releases/tag/2.9.1)
 - The SwiftSDK for iOS has been updated to version [2.9.1](https://github.com/TelemetryDeck/SwiftSDK/releases/tag/2.9.1)
-- The KotlinSDK for Android has been updated to [6.0.0](https://github.com/TelemetryDeck/KotlinSDK/releases/tag/6.0.0)
+- The KotlinSDK for Android has been updated to [6.0.1](https://github.com/TelemetryDeck/KotlinSDK/releases/tag/6.0.1)
 
 ## 2.2.0
 
