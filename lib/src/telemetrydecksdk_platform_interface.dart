@@ -58,4 +58,25 @@ abstract class TelemetrydecksdkPlatform extends PlatformInterface {
     throw UnimplementedError(
         'navigateToDestination() has not been implemented.');
   }
+
+  Future<void> acquiredUser(
+    String channel, {
+    Map<String, String>? parameters,
+  }) async {
+    throw UnimplementedError('acquiredUser() has not been implemented.');
+  }
+
+  Future<void> leadStarted(
+    String leadId, {
+    Map<String, String>? parameters,
+  }) async {
+    throw UnimplementedError('leadStarted() has not been implemented.');
+  }
+
+  Future<void> leadConverted(
+    String leadId, {
+    Map<String, String>? parameters,
+  }) async {
+    throw UnimplementedError('leadConverted() has not been implemented.');
+  }
 }

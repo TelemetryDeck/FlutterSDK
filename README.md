@@ -125,6 +125,31 @@ Telemetrydecksdk.navigate("screen1", "screen2",
 
 For more information, please check [this post](https://telemetrydeck.com/docs/articles/navigation-signals/).
 
+## Acquisition
+
+The following helper methods are available
+
+```dart
+/**
+ * Send a `TelemetryDeck.Acquisition.userAcquired` signal with the provided channel.
+ */
+Telemetrydecksdk.acquiredUser(channel: String, ...)
+```
+
+```dart
+/**
+ * Send a `TelemetryDeck.Acquisition.leadStarted` signal with the provided leadId.
+ */
+Telemetrydecksdk.leadStarted(leadId: String, ...)
+```
+
+```dart
+/**
+ * Send a `TelemetryDeck.Acquisition.leadConverted` signal with the provided leadId.
+ */
+Telemetrydecksdk.leadConverted(leadId: String, ...)
+```
+
 ## Test mode
 
 If your app's build configuration is set to "Debug", all signals sent will be marked as testing signals. In the Telemetry Viewer app, activate **Test Mode** to see those.
