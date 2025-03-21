@@ -17,6 +17,10 @@ public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
             nativeStop(call, result: result)
         case "send":
             nativeQueue(call, result: result)
+        case "startDurationSignal":
+            nativeStartDurationSignal(call, result: result)
+        case "stopAndSendDurationSignal":
+            nativeStopAndSendDurationSignal(call, result: result)
         case "generateNewSession":
             TelemetryDeck.generateNewSession()
             result(nil)
@@ -93,6 +97,44 @@ public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
         }
         
         result(nil)
+    }
+    
+    private func nativeStartDurationSignal(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        guard let arguments = call.arguments as? [String: Any], let signalType = arguments["signalType"] as? String else {
+            result(FlutterError(code: "INVALID_ARGUMENT", message: "Missing required argument signalType", details: nil))
+            return
+        }
+        
+        let parameters = arguments["parameters"] as? [String : String] ?? [:]
+        
+        // do not attempt to send signals if the client is stopped
+        if TelemetryManager.isInitialized {
+            DispatchQueue.main.async {
+                TelemetryDeck.startDurationSignal(signalType, parameters: parameters)
+                result(nil)
+            }
+        } else {
+            result(nil)
+        }
+    }
+    
+    private func nativeStopAndSendDurationSignal(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        guard let arguments = call.arguments as? [String: Any], let signalType = arguments["signalType"] as? String else {
+            result(FlutterError(code: "INVALID_ARGUMENT", message: "Missing required argument signalType", details: nil))
+            return
+        }
+        
+        let parameters = arguments["parameters"] as? [String : String] ?? [:]
+        
+        // do not attempt to send signals if the client is stopped
+        if TelemetryManager.isInitialized {
+            DispatchQueue.main.async {
+                TelemetryDeck.stopAndSendDurationSignal(signalType, parameters: parameters)
+                result(nil)
+            }
+        } else {
+            result(nil)
+        }
     }
     
     private func nativeInitialize(_ call: FlutterMethodCall, result: @escaping FlutterResult) {

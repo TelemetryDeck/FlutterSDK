@@ -47,6 +47,16 @@ class TelemetrydecksdkPlugin : FlutterPlugin, MethodCallHandler {
                 nativeQueue(call, result)
             }
 
+            "startDurationSignal" -> {
+                // this maps to the queue method which aligns with the behaviour of the iOS SDK
+                nativeStartDurationSignal(call, result)
+            }
+
+            "stopAndSendDurationSignal" -> {
+                // this maps to the queue method which aligns with the behaviour of the iOS SDK
+                nativeStopAndSendDurationSignal(call, result)
+            }
+
             "generateNewSession" -> {
                 TelemetryDeck.newSession()
                 result.success(null)
@@ -145,6 +155,46 @@ class TelemetrydecksdkPlugin : FlutterPlugin, MethodCallHandler {
 
             coroutineScope.launch {
                 TelemetryDeck.signal(signalType, clientUser, additionalPayload.orEmpty())
+
+                withContext(Dispatchers.Main) {
+                    result.success(null)
+                }
+            }
+        } else {
+            result.error("INVALID_ARGUMENT", "signalType must be provided", null)
+        }
+    }
+
+    private fun nativeStartDurationSignal(
+        call: MethodCall,
+        result: Result
+    ) {
+        val signalType = call.argument<String>("signalType")
+        if (signalType != null) {
+            val parameters = call.argument<Map<String, String>>("parameters")
+
+            coroutineScope.launch {
+                TelemetryDeck.startDurationSignal(signalType, parameters.orEmpty())
+
+                withContext(Dispatchers.Main) {
+                    result.success(null)
+                }
+            }
+        } else {
+            result.error("INVALID_ARGUMENT", "signalType must be provided", null)
+        }
+    }
+
+    private fun nativeStopAndSendDurationSignal(
+        call: MethodCall,
+        result: Result
+    ) {
+        val signalType = call.argument<String>("signalType")
+        if (signalType != null) {
+            val parameters = call.argument<Map<String, String>>("parameters")
+
+            coroutineScope.launch {
+                TelemetryDeck.stopAndSendDurationSignal(signalType, parameters.orEmpty())
 
                 withContext(Dispatchers.Main) {
                     result.success(null)

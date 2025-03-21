@@ -106,6 +106,20 @@ const TelemetryManagerConfiguration(
         ),
 ```
 
+## Duration Signals
+
+The SDK offers convenience methods to facilitate tracking the duration of specific objects or events.
+
+Once started, a duration signal will be tracked internally by the SDK and upon completion, it will send the signal while also adding a `TelemetryDeck.Signal.durationInSeconds` parameter.
+
+```dart
+// start tracking, without sending a signal
+TelemetryDeck.startDurationSignal("wizard_step1")
+
+// end tracking, sends the signal including the total duration (excluding background time)
+TelemetryDeck.stopAndSendDurationSignal("wizard_step1")
+```
+
 ## Navigation signals
 
 A navigation signal is a regular TelemetryDeck signal of type `TelemetryDeck.Navigation.pathChanged`. Automatic navigation tracking is available using the `navigate` and `navigateToDestination` methods:
