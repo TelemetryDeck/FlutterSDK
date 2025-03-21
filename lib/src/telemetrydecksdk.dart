@@ -45,6 +45,42 @@ abstract class Telemetrydecksdk {
     );
   }
 
+  static Future<void> acquiredUser(String channel,
+      {Map<String, String>? parameters, String? customUserID}) async {
+    final payload = parameters ?? {};
+
+    final stringifiedPayload = payload.map(
+      (key, value) => MapEntry(key, value.toString()),
+    );
+
+    await TelemetrydecksdkPlatform.instance.acquiredUser(channel,
+        parameters: stringifiedPayload, customUserID: customUserID);
+  }
+
+  static Future<void> leadStarted(String leadId,
+      {Map<String, String>? parameters, String? customUserID}) async {
+    final payload = parameters ?? {};
+
+    final stringifiedPayload = payload.map(
+      (key, value) => MapEntry(key, value.toString()),
+    );
+
+    await TelemetrydecksdkPlatform.instance.leadStarted(leadId,
+        parameters: stringifiedPayload, customUserID: customUserID);
+  }
+
+  static Future<void> leadConverted(String leadId,
+      {Map<String, String>? parameters, String? customUserID}) async {
+    final payload = parameters ?? {};
+
+    final stringifiedPayload = payload.map(
+      (key, value) => MapEntry(key, value.toString()),
+    );
+
+    await TelemetrydecksdkPlatform.instance.leadConverted(leadId,
+        parameters: stringifiedPayload, customUserID: customUserID);
+  }
+
   static Future<void> generateNewSession() async {
     await TelemetrydecksdkPlatform.instance.generateNewSession();
   }

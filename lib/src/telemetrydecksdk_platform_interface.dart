@@ -62,6 +62,7 @@ abstract class TelemetrydecksdkPlatform extends PlatformInterface {
   Future<void> acquiredUser(
     String channel, {
     Map<String, String>? parameters,
+    String? customUserID,
   }) async {
     throw UnimplementedError('acquiredUser() has not been implemented.');
   }
@@ -69,6 +70,7 @@ abstract class TelemetrydecksdkPlatform extends PlatformInterface {
   Future<void> leadStarted(
     String leadId, {
     Map<String, String>? parameters,
+    String? customUserID,
   }) async {
     throw UnimplementedError('leadStarted() has not been implemented.');
   }
@@ -76,6 +78,7 @@ abstract class TelemetrydecksdkPlatform extends PlatformInterface {
   Future<void> leadConverted(
     String leadId, {
     Map<String, String>? parameters,
+    String? customUserID,
   }) async {
     throw UnimplementedError('leadConverted() has not been implemented.');
   }
