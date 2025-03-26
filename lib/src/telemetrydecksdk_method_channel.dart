@@ -37,6 +37,45 @@ class MethodChannelTelemetrydecksdk extends TelemetrydecksdkPlatform {
   }
 
   @override
+  Future<void> acquiredUser(String channel,
+      {Map<String, String>? parameters, String? customUserID}) async {
+    await methodChannel.invokeMethod<void>(
+      'acquiredUser',
+      {
+        'channel': channel,
+        'parameters': parameters,
+        'customUserID': customUserID,
+      },
+    );
+  }
+
+  @override
+  Future<void> leadStarted(String leadId,
+      {Map<String, String>? parameters, String? customUserID}) async {
+    await methodChannel.invokeMethod<void>(
+      'leadStarted',
+      {
+        'leadId': leadId,
+        'parameters': parameters,
+        'customUserID': customUserID,
+      },
+    );
+  }
+
+  @override
+  Future<void> leadConverted(String leadId,
+      {Map<String, String>? parameters, String? customUserID}) async {
+    await methodChannel.invokeMethod<void>(
+      'leadConverted',
+      {
+        'leadId': leadId,
+        'parameters': parameters,
+        'customUserID': customUserID,
+      },
+    );
+  }
+
+  @override
   Future<void> generateNewSession() async {
     await methodChannel.invokeMethod<void>('generateNewSession');
   }

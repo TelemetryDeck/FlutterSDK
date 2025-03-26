@@ -48,7 +48,6 @@ class TelemetrydecksdkPlugin : FlutterPlugin, MethodCallHandler {
             }
 
             "generateNewSession" -> {
-                TelemetryDeck.newSession()
                 result.success(null)
             }
 
@@ -62,6 +61,18 @@ class TelemetrydecksdkPlugin : FlutterPlugin, MethodCallHandler {
 
             "navigateToDestination" -> {
                 nativeNavigateDestination(call, result)
+            }
+
+            "acquiredUser" -> {
+                nativeAcquiredUser(call, result)
+            }
+
+            "leadStarted" -> {
+                nativeLeadStarted(call, result)
+            }
+
+            "leadConverted" -> {
+                nativeLeadConverted(call, result)
             }
 
             else -> {
@@ -216,5 +227,68 @@ class TelemetrydecksdkPlugin : FlutterPlugin, MethodCallHandler {
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         channel.setMethodCallHandler(null)
+    }
+
+    private fun nativeAcquiredUser(
+        call: MethodCall,
+        result: Result
+    ) {
+        val channel = call.argument<String>("channel")
+        if (channel != null) {
+            val customUserID = call.argument<String?>("customUserID")
+            val parameters = call.argument<Map<String, String>>("parameters")
+
+            coroutineScope.launch {
+                TelemetryDeck.acquiredUser(channel, parameters.orEmpty(), customUserID)
+
+                withContext(Dispatchers.Main) {
+                    result.success(null)
+                }
+            }
+        } else {
+            result.error("INVALID_ARGUMENT", "channel must be provided", null)
+        }
+    }
+
+    private fun nativeLeadStarted(
+        call: MethodCall,
+        result: Result
+    ) {
+        val leadID = call.argument<String>("leadID")
+        if (leadID != null) {
+            val customUserID = call.argument<String?>("customUserID")
+            val parameters = call.argument<Map<String, String>>("parameters")
+
+            coroutineScope.launch {
+                TelemetryDeck.leadStarted(leadID, parameters.orEmpty(), customUserID)
+
+                withContext(Dispatchers.Main) {
+                    result.success(null)
+                }
+            }
+        } else {
+            result.error("INVALID_ARGUMENT", "leadID must be provided", null)
+        }
+    }
+
+    private fun nativeLeadConverted(
+        call: MethodCall,
+        result: Result
+    ) {
+        val leadID = call.argument<String>("leadID")
+        if (leadID != null) {
+            val customUserID = call.argument<String?>("customUserID")
+            val parameters = call.argument<Map<String, String>>("parameters")
+
+            coroutineScope.launch {
+                TelemetryDeck.leadConverted(leadID, parameters.orEmpty(), customUserID)
+
+                withContext(Dispatchers.Main) {
+                    result.success(null)
+                }
+            }
+        } else {
+            result.error("INVALID_ARGUMENT", "leadID must be provided", null)
+        }
     }
 }
