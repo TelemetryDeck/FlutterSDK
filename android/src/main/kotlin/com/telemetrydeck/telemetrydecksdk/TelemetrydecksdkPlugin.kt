@@ -175,6 +175,7 @@ class TelemetrydecksdkPlugin : FlutterPlugin, MethodCallHandler {
             val defaultSignalPrefix = arguments["defaultSignalPrefix"] as? String?
             val defaultParameterPrefix = arguments["defaultParameterPrefix"] as? String?
             val defaultParameters = arguments["defaultParameters"] as? Map<String, String>?
+            val namespace = arguments["namespace"] as? String?
 
 
             // Initialize the client
@@ -196,6 +197,9 @@ class TelemetrydecksdkPlugin : FlutterPlugin, MethodCallHandler {
             }
             salt?.let {
                 builder.salt(it)
+            }
+            namespace?.let {
+                builder.namespace(it)
             }
 
             if (defaultSignalPrefix != null || defaultParameterPrefix != null) {
