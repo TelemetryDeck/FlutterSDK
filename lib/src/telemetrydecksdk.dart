@@ -45,6 +45,38 @@ abstract class Telemetrydecksdk {
     );
   }
 
+  static Future<void> startDurationSignal(
+    String signalType, {
+    Map<String, String>? parameters,
+  }) async {
+    final payload = parameters ?? {};
+
+    final stringifiedPayload = payload.map(
+      (key, value) => MapEntry(key, value.toString()),
+    );
+
+    await TelemetrydecksdkPlatform.instance.startDurationSignal(
+      signalType,
+      parameters: stringifiedPayload,
+    );
+  }
+
+  static Future<void> stopAndSendDurationSignal(
+    String signalType, {
+    Map<String, String>? parameters,
+  }) async {
+    final payload = parameters ?? {};
+
+    final stringifiedPayload = payload.map(
+      (key, value) => MapEntry(key, value.toString()),
+    );
+
+    await TelemetrydecksdkPlatform.instance.stopAndSendDurationSignal(
+      signalType,
+      parameters: stringifiedPayload,
+    );
+  }
+
   static Future<void> generateNewSession() async {
     await TelemetrydecksdkPlatform.instance.generateNewSession();
   }

@@ -76,7 +76,40 @@ class _MyAppState extends State<MyApp> {
 
                   Telemetrydecksdk.navigateToDestination("landing");
                 },
-                child: const Text('Press Me'),
+                child: const Text('button_clicked'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Telemetrydecksdk.send(
+                    "button_clicked",
+                    clientUser: "user",
+                  );
+                  // Provide additional payload information
+                  Telemetrydecksdk.send(
+                    "button_clicked",
+                    additionalPayload: {"mapKey": "mapValue"},
+                  );
+                  // Signal navigation
+                  Telemetrydecksdk.navigate("home", "settings");
+
+                  Telemetrydecksdk.navigate("settings", "about",
+                      clientUser: "custom_user");
+
+                  Telemetrydecksdk.navigateToDestination("landing");
+                },
+                child: const Text('button_clicked + Params'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Telemetrydecksdk.startDurationSignal("signal1");
+                },
+                child: const Text('Start duration signal'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Telemetrydecksdk.stopAndSendDurationSignal("signal1");
+                },
+                child: const Text('Stop duration signal'),
               ),
             ],
           ),

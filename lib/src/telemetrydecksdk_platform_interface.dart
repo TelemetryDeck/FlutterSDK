@@ -40,6 +40,21 @@ abstract class TelemetrydecksdkPlatform extends PlatformInterface {
     throw UnimplementedError('send() has not been implemented.');
   }
 
+  Future<void> startDurationSignal(
+    String signalType, {
+    Map<String, String>? parameters,
+  }) async {
+    throw UnimplementedError('startDurationSignal() has not been implemented.');
+  }
+
+  Future<void> stopAndSendDurationSignal(
+    String signalType, {
+    Map<String, String>? parameters,
+  }) async {
+    throw UnimplementedError(
+        'stopAndSendDurationSignal() has not been implemented.');
+  }
+
   Future<void> generateNewSession() async {
     throw UnimplementedError('generateNewSession() has not been implemented.');
   }

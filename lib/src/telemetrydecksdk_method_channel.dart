@@ -37,6 +37,34 @@ class MethodChannelTelemetrydecksdk extends TelemetrydecksdkPlatform {
   }
 
   @override
+  Future<void> startDurationSignal(
+    String signalType, {
+    Map<String, String>? parameters,
+  }) async {
+    await methodChannel.invokeMethod<void>(
+      'startDurationSignal',
+      {
+        'signalType': signalType,
+        'parameters': parameters,
+      },
+    );
+  }
+
+  @override
+  Future<void> stopAndSendDurationSignal(
+    String signalType, {
+    Map<String, String>? parameters,
+  }) async {
+    await methodChannel.invokeMethod<void>(
+      'stopAndSendDurationSignal',
+      {
+        'signalType': signalType,
+        'parameters': parameters,
+      },
+    );
+  }
+
+  @override
   Future<void> generateNewSession() async {
     await methodChannel.invokeMethod<void>('generateNewSession');
   }
