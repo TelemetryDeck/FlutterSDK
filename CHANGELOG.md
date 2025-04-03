@@ -1,6 +1,12 @@
+## 2.4.0
+
+- https://github.com/TelemetryDeck/FlutterSDK/releases/tag/2.4.0
+
+- This update adds support for duration signals and custom namespace configuration
+
 ## 2.3.0
 
-- https://github.com/TelemetryDeck/FlutterSDK/releases/tag/2.2.0
+- https://github.com/TelemetryDeck/FlutterSDK/releases/tag/2.3.0
 
 - This update introduces the latest features from the native SDKs, including support for the new session tracking and acquisition parameters.
 
