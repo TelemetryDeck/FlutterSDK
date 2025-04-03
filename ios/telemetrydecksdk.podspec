@@ -13,7 +13,8 @@ Flutter SDK for TelemetryDeck, a privacy-conscious analytics service for apps an
   s.license          = { :file => '../LICENSE' }
   s.author           = { 'TelemetryDeck' => 'info@telemetrydeck.com' }
   s.source           = { :path => '.' }
-  s.source_files = 'Classes/**/*'
+  s.source_files = 'telemetrydecksdk/Sources/telemetrydecksdk/**/*.swift'
+  s.resource_bundles = {'telemetrydecksdk_privacy' => ['telemetrydecksdk/Sources/telemetrydecksdk/PrivacyInfo.xcprivacy']}
   s.dependency 'Flutter'
   s.dependency 'TelemetryDeck', '~> 2.9.1'
   s.platform = :ios, '12.0'
