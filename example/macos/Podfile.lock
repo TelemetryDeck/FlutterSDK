@@ -1,9 +1,9 @@
 PODS:
   - FlutterMacOS (1.0.0)
-  - TelemetryDeck (2.9.1)
+  - TelemetryDeck (2.9.3)
   - telemetrydecksdk (0.0.1):
     - FlutterMacOS
-    - TelemetryDeck (~> 2.9.1)
+    - TelemetryDeck (~> 2.9.3)
 
 DEPENDENCIES:
   - FlutterMacOS (from `Flutter/ephemeral`)
@@ -21,8 +21,8 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
-  TelemetryDeck: 2d31ff48e93fd37f2a9f257dba5d633ea11ed9ff
-  telemetrydecksdk: 1d9828cd24aa8be1448b840a8a025d9dbbfe058f
+  TelemetryDeck: 5331ca64c53ab1ab6162c558c8b46b412c744483
+  telemetrydecksdk: 93d7906aee5406574bc5a5dc4e6027d9bd429c43
 
 PODFILE CHECKSUM: 236401fc2c932af29a9fcf0e97baeeb2d750d367
 
