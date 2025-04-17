@@ -1,3 +1,8 @@
+## 2.5.0
+
+- https://github.com/TelemetryDeck/FlutterSDK/releases/tag/2.5.0
+
+
 ## 2.4.0
 
 - https://github.com/TelemetryDeck/FlutterSDK/releases/tag/2.4.0
