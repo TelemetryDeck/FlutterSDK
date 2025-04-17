@@ -24,4 +24,6 @@ implementation 'com.telemetrydeck:kotlin-sdk:2.2.0'
 
 On iOS, the dependency is configured in `ios/telemetrydecksdk.podspec` using the podspect Dependency format `s.dependency 'TelemetryClient', '~> 2.0'`.
 
+On macOS, the dependency is configured in `macos/telemetrydecksdk.podspec` using the podspect Dependency format `s.dependency 'TelemetryClient', '~> 2.0'`.
+
 Note: CocoaPods requires running `pod update` to fetch the latest version of the native SDK for both iOS and macOS. You can do so in the ios and macOS folders of the example project.
