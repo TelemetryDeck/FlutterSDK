@@ -1,5 +1,8 @@
 import 'dart:async';
 
+import 'package:telemetrydecksdk/src/error_category.dart';
+import 'package:telemetrydecksdk/src/purchase_event.dart';
+import 'package:telemetrydecksdk/src/purchase_type.dart';
 import 'package:telemetrydecksdk/src/telemetry_manager_configuration.dart';
 import 'package:telemetrydecksdk/src/telemetry_provider.dart';
 
@@ -31,6 +34,7 @@ abstract class Telemetrydecksdk {
     String signalType, {
     String? clientUser,
     Map<String, dynamic>? additionalPayload,
+    double? floatValue,
   }) async {
     final payload = additionalPayload ?? {};
 
@@ -42,6 +46,7 @@ abstract class Telemetrydecksdk {
       signalType,
       clientUser: clientUser,
       additionalPayload: stringifiedPayload,
+      floatValue: floatValue,
     );
   }
 
@@ -95,5 +100,97 @@ abstract class Telemetrydecksdk {
       {String? clientUser}) async {
     await TelemetrydecksdkPlatform.instance
         .navigateToDestination(destinationPath, clientUser: clientUser);
+  }
+
+  static Future<void> acquiredUser(String channel,
+      {Map<String, String>? params, String? customUserID}) async {
+    await TelemetrydecksdkPlatform.instance
+        .acquiredUser(channel, params: params, customUserID: customUserID);
+  }
+
+  static Future<void> leadStarted(String leadId,
+      {Map<String, String>? params, String? customUserID}) async {
+    await TelemetrydecksdkPlatform.instance
+        .leadStarted(leadId, params: params, customUserID: customUserID);
+  }
+
+  static Future<void> leadConverted(String leadId,
+      {Map<String, String>? params, String? customUserID}) async {
+    await TelemetrydecksdkPlatform.instance
+        .leadConverted(leadId, params: params, customUserID: customUserID);
+  }
+
+  static Future<void> onboardingCompleted(
+      {Map<String, String>? params, String? customUserID}) async {
+    await TelemetrydecksdkPlatform.instance
+        .onboardingCompleted(params: params, customUserID: customUserID);
+  }
+
+  static Future<void> coreFeatureUsed(String featureName,
+      {Map<String, String>? params, String? customUserID}) async {
+    await TelemetrydecksdkPlatform.instance.coreFeatureUsed(featureName,
+        params: params, customUserID: customUserID);
+  }
+
+  static Future<void> paywallShown(String reason,
+      {Map<String, String>? params, String? customUserID}) async {
+    await TelemetrydecksdkPlatform.instance
+        .paywallShown(reason, params: params, customUserID: customUserID);
+  }
+
+  static Future<void> purchaseCompleted(
+      PurchaseEvent event,
+      String countryCode,
+      String productID,
+      PurchaseType purchaseType,
+      int priceAmountMicros,
+      String currencyCode,
+      {String? offerID,
+      Map<String, String>? params,
+      String? customUserID}) async {
+    await TelemetrydecksdkPlatform.instance.purchaseCompleted(
+        event.name,
+        countryCode,
+        productID,
+        purchaseType.name,
+        priceAmountMicros,
+        currencyCode,
+        offerID: offerID,
+        params: params,
+        customUserID: customUserID);
+  }
+
+  static Future<void> referralSent(
+      {int receiversCount = 1,
+      String? kind,
+      Map<String, String>? params,
+      String? customUserID}) async {
+    await TelemetrydecksdkPlatform.instance.referralSent(
+        receiversCount: receiversCount,
+        kind: kind,
+        params: params,
+        customUserID: customUserID);
+  }
+
+  static Future<void> userRatingSubmitted(int rating,
+      {String? comment,
+      Map<String, String>? params,
+      String? customUserID}) async {
+    await TelemetrydecksdkPlatform.instance.userRatingSubmitted(rating,
+        comment: comment, params: params, customUserID: customUserID);
+  }
+
+  static Future<void> errorOccurred(String id,
+      {ErrorCategory? category,
+      String? message,
+      Map<String, String>? parameters,
+      double? floatValue,
+      String? customUserID}) async {
+    await TelemetrydecksdkPlatform.instance.errorOccurred(id,
+        category: category?.name,
+        message: message,
+        parameters: parameters,
+        floatValue: floatValue,
+        customUserID: customUserID);
   }
 }

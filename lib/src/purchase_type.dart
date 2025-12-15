@@ -1,0 +1,4 @@
+enum PurchaseType {
+  subscription,
+  oneTimePurchase,
+}
