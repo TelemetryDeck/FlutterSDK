@@ -16,7 +16,7 @@ Flutter SDK for TelemetryDeck, a privacy-conscious analytics service for apps an
   s.source           = { :path => '.' }
   s.source_files     = 'Classes/**/*'
   s.dependency 'FlutterMacOS'
-  s.dependency 'TelemetryDeck', '~> 2.9.3'
+  s.dependency 'TelemetryDeck', '~> 2.11.0'
 
   s.platform = :osx, '10.11'
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
