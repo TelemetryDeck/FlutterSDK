@@ -43,5 +43,8 @@ jobs:
           flutter build apk
       - name: Lint
         run: make checklint
-      - name: Test
-        run: make test-all
+      - name: Test Android
+        run: make test-android
+      - name: Test macOS
+        run: make test-macos
+        # todo: add iOS testing (with code signing enabled)
