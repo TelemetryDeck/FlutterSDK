@@ -13,7 +13,7 @@ concurrency:
 
 jobs:
   test:
-    name: Test and Lint the SDK
+    name: Build, Lint and Test the SDK
     runs-on: macos-26
     steps:
       - name: Repository checkout
@@ -26,6 +26,8 @@ jobs:
         run: gem install cocoapods
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
+        with:
+          channel: stable
       - name: Configure JDK
         uses: actions/setup-java@v4
         with:
@@ -33,10 +35,12 @@ jobs:
           java-version: "17"
       - name: Install dependencies
         run: flutter pub get
-      - name: Install cocoapods dependencies
+      - name: Build
         run: |
-          cd example && cd ios && pod install
-          cd ../macos && pod install
+          cd example
+          flutter build ios --release --no-codesign
+          flutter build macos
+          flutter build apk
       - name: Lint
         run: make checklint
       - name: Test
