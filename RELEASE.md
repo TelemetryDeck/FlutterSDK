@@ -19,7 +19,7 @@ The Flutter SDK depends on the latest major version of the native SDKs. This is 
 On Android, the dependency is configured in `android/build.gradle`:
 
 ```
-implementation 'com.telemetrydeck:kotlin-sdk:2.2.0'
+implementation 'com.telemetrydeck:kotlin-sdk:6.3.0'
 ```
 
 On iOS, the dependency is configured in `ios/telemetrydecksdk.podspec` using the podspect Dependency format `s.dependency 'TelemetryClient', '~> 2.0'`.

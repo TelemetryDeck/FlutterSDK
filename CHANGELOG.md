@@ -1,3 +1,14 @@
+## 3.0.0
+
+- https://github.com/TelemetryDeck/FlutterSDK/releases/tag/3.0.0
+
+- This update introduces the latest features from the native SDKs including:
+
+  - it's now possible to set `floatValue`
+  - added helper methods: acquiredUser, leadStarted, leadConverted, onboardingCompleted, coreFeatureUsed, paywallShown, purchaseCompleted, referralSent, userRatingSubmitted and errorOccurred
+  
+- [Android] Gradle Kotlin 2.2.20 and Gradle 8.14
+
 ## 2.5.0
 
 - https://github.com/TelemetryDeck/FlutterSDK/releases/tag/2.5.0

@@ -36,6 +36,7 @@ abstract class TelemetrydecksdkPlatform extends PlatformInterface {
     String signalType, {
     String? clientUser,
     Map<String, String>? additionalPayload,
+    double? floatValue,
   }) async {
     throw UnimplementedError('send() has not been implemented.');
   }
@@ -72,5 +73,72 @@ abstract class TelemetrydecksdkPlatform extends PlatformInterface {
       {String? clientUser}) async {
     throw UnimplementedError(
         'navigateToDestination() has not been implemented.');
+  }
+
+  Future<void> acquiredUser(String channel,
+      {Map<String, String>? params, String? customUserID}) async {
+    throw UnimplementedError('acquiredUser() has not been implemented.');
+  }
+
+  Future<void> leadStarted(String leadId,
+      {Map<String, String>? params, String? customUserID}) async {
+    throw UnimplementedError('leadStarted() has not been implemented.');
+  }
+
+  Future<void> leadConverted(String leadId,
+      {Map<String, String>? params, String? customUserID}) async {
+    throw UnimplementedError('leadConverted() has not been implemented.');
+  }
+
+  Future<void> onboardingCompleted(
+      {Map<String, String>? params, String? customUserID}) async {
+    throw UnimplementedError('onboardingCompleted() has not been implemented.');
+  }
+
+  Future<void> coreFeatureUsed(String featureName,
+      {Map<String, String>? params, String? customUserID}) async {
+    throw UnimplementedError('coreFeatureUsed() has not been implemented.');
+  }
+
+  Future<void> paywallShown(String reason,
+      {Map<String, String>? params, String? customUserID}) async {
+    throw UnimplementedError('paywallShown() has not been implemented.');
+  }
+
+  Future<void> purchaseCompleted(
+      String event,
+      String countryCode,
+      String productID,
+      String purchaseType,
+      int priceAmountMicros,
+      String currencyCode,
+      {String? offerID,
+      Map<String, String>? params,
+      String? customUserID}) async {
+    throw UnimplementedError('purchaseCompleted() has not been implemented.');
+  }
+
+  Future<void> referralSent(
+      {int receiversCount = 1,
+      String? kind,
+      Map<String, String>? params,
+      String? customUserID}) async {
+    throw UnimplementedError('referralSent() has not been implemented.');
+  }
+
+  Future<void> userRatingSubmitted(int rating,
+      {String? comment,
+      Map<String, String>? params,
+      String? customUserID}) async {
+    throw UnimplementedError('userRatingSubmitted() has not been implemented.');
+  }
+
+  Future<void> errorOccurred(String id,
+      {String? category,
+      String? message,
+      Map<String, String>? parameters,
+      double? floatValue,
+      String? customUserID}) async {
+    throw UnimplementedError('errorOccurred() has not been implemented.');
   }
 }

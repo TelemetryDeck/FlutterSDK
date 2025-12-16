@@ -2,7 +2,10 @@ package com.telemetrydeck.telemetrydecksdk
 
 import android.app.Application
 import android.content.Context
+import com.telemetrydeck.sdk.PurchaseEvent
+import com.telemetrydeck.sdk.PurchaseType
 import com.telemetrydeck.sdk.TelemetryDeck
+import com.telemetrydeck.sdk.params.ErrorCategory
 import com.telemetrydeck.sdk.providers.DefaultParameterProvider
 import com.telemetrydeck.sdk.providers.DefaultPrefixProvider
 import io.flutter.embedding.engine.plugins.FlutterPlugin
@@ -72,6 +75,46 @@ class TelemetrydecksdkPlugin : FlutterPlugin, MethodCallHandler {
 
             "navigateToDestination" -> {
                 nativeNavigateDestination(call, result)
+            }
+
+            "acquiredUser" -> {
+                nativeAcquiredUser(call, result)
+            }
+
+            "leadStarted" -> {
+                nativeLeadStarted(call, result)
+            }
+
+            "leadConverted" -> {
+                nativeLeadConverted(call, result)
+            }
+
+            "onboardingCompleted" -> {
+                nativeOnboardingCompleted(call, result)
+            }
+
+            "coreFeatureUsed" -> {
+                nativeCoreFeatureUsed(call, result)
+            }
+
+            "paywallShown" -> {
+                nativePaywallShown(call, result)
+            }
+
+            "purchaseCompleted" -> {
+                nativePurchaseCompleted(call, result)
+            }
+
+            "referralSent" -> {
+                nativeReferralSent(call, result)
+            }
+
+            "userRatingSubmitted" -> {
+                nativeUserRatingSubmitted(call, result)
+            }
+
+            "errorOccurred" -> {
+                nativeErrorOccurred(call, result)
             }
 
             else -> {
@@ -152,9 +195,10 @@ class TelemetrydecksdkPlugin : FlutterPlugin, MethodCallHandler {
         if (signalType != null) {
             val clientUser = call.argument<String?>("clientUser")
             val additionalPayload = call.argument<Map<String, String>>("additionalPayload")
+            val floatValue = call.argument<Double?>("floatValue")
 
             coroutineScope.launch {
-                TelemetryDeck.signal(signalType, clientUser, additionalPayload.orEmpty())
+                TelemetryDeck.signal(signalType, additionalPayload.orEmpty(), floatValue, clientUser)
 
                 withContext(Dispatchers.Main) {
                     result.success(null)
@@ -202,6 +246,229 @@ class TelemetrydecksdkPlugin : FlutterPlugin, MethodCallHandler {
             }
         } else {
             result.error("INVALID_ARGUMENT", "signalType must be provided", null)
+        }
+    }
+
+    private fun nativeAcquiredUser(call: MethodCall, result: Result) {
+        val channel = call.argument<String>("channel")
+        if (channel == null) {
+            result.error("INVALID_ARGUMENT", "channel is required", null)
+            return
+        }
+
+        val params = call.argument<Map<String, String>>("params")
+        val customUserID = call.argument<String?>("customUserID")
+
+        coroutineScope.launch {
+            TelemetryDeck.acquiredUser(channel, params.orEmpty(), customUserID)
+            withContext(Dispatchers.Main) {
+                result.success(null)
+            }
+        }
+    }
+
+    private fun nativeLeadStarted(call: MethodCall, result: Result) {
+        val leadId = call.argument<String>("leadId")
+        if (leadId == null) {
+            result.error("INVALID_ARGUMENT", "leadId is required", null)
+            return
+        }
+
+        val params = call.argument<Map<String, String>>("params")
+        val customUserID = call.argument<String?>("customUserID")
+
+        coroutineScope.launch {
+            TelemetryDeck.leadStarted(leadId, params.orEmpty(), customUserID)
+            withContext(Dispatchers.Main) {
+                result.success(null)
+            }
+        }
+    }
+
+    private fun nativeLeadConverted(call: MethodCall, result: Result) {
+        val leadId = call.argument<String>("leadId")
+        if (leadId == null) {
+            result.error("INVALID_ARGUMENT", "leadId is required", null)
+            return
+        }
+
+        val params = call.argument<Map<String, String>>("params")
+        val customUserID = call.argument<String?>("customUserID")
+
+        coroutineScope.launch {
+            TelemetryDeck.leadConverted(leadId, params.orEmpty(), customUserID)
+            withContext(Dispatchers.Main) {
+                result.success(null)
+            }
+        }
+    }
+
+    private fun nativeOnboardingCompleted(call: MethodCall, result: Result) {
+        val params = call.argument<Map<String, String>>("params")
+        val customUserID = call.argument<String?>("customUserID")
+
+        coroutineScope.launch {
+            TelemetryDeck.onboardingCompleted(params.orEmpty(), customUserID)
+            withContext(Dispatchers.Main) {
+                result.success(null)
+            }
+        }
+    }
+
+    private fun nativeCoreFeatureUsed(call: MethodCall, result: Result) {
+        val featureName = call.argument<String>("featureName")
+        if (featureName == null) {
+            result.error("INVALID_ARGUMENT", "featureName is required", null)
+            return
+        }
+
+        val params = call.argument<Map<String, String>>("params")
+        val customUserID = call.argument<String?>("customUserID")
+
+        coroutineScope.launch {
+            TelemetryDeck.coreFeatureUsed(featureName, params.orEmpty(), customUserID)
+            withContext(Dispatchers.Main) {
+                result.success(null)
+            }
+        }
+    }
+
+    private fun nativePaywallShown(call: MethodCall, result: Result) {
+        val reason = call.argument<String>("reason")
+        if (reason == null) {
+            result.error("INVALID_ARGUMENT", "reason is required", null)
+            return
+        }
+
+        val params = call.argument<Map<String, String>>("params")
+        val customUserID = call.argument<String?>("customUserID")
+
+        coroutineScope.launch {
+            TelemetryDeck.paywallShown(reason, params.orEmpty(), customUserID)
+            withContext(Dispatchers.Main) {
+                result.success(null)
+            }
+        }
+    }
+
+    private fun nativePurchaseCompleted(call: MethodCall, result: Result) {
+        val eventString = call.argument<String>("event")
+        val countryCode = call.argument<String>("countryCode")
+        val productID = call.argument<String>("productID")
+        val purchaseTypeString = call.argument<String>("purchaseType")
+        val priceAmountMicros = call.argument<Long>("priceAmountMicros")
+        val currencyCode = call.argument<String>("currencyCode")
+
+        if (eventString == null || countryCode == null || productID == null ||
+            purchaseTypeString == null || priceAmountMicros == null || currencyCode == null) {
+            result.error("INVALID_ARGUMENT", "event, countryCode, productID, purchaseType, priceAmountMicros, and currencyCode are required", null)
+            return
+        }
+
+        val event = when (eventString) {
+            "purchaseCompleted" -> PurchaseEvent.PAID_PURCHASE
+            "freeTrialStarted" -> PurchaseEvent.STARTED_FREE_TRIAL
+            "convertedFromFreeTrial" -> PurchaseEvent.CONVERTED_FROM_TRIAL
+            else -> {
+                result.error("INVALID_ARGUMENT", "Invalid purchase event: $eventString", null)
+                return
+            }
+        }
+
+        val purchaseType = when (purchaseTypeString) {
+            "subscription" -> PurchaseType.SUBSCRIPTION
+            "oneTimePurchase" -> PurchaseType.ONE_TIME_PURCHASE
+            else -> {
+                result.error("INVALID_ARGUMENT", "Invalid purchase type: $purchaseTypeString", null)
+                return
+            }
+        }
+
+        val offerID = call.argument<String?>("offerID")
+        val params = call.argument<Map<String, String>>("params")
+        val customUserID = call.argument<String?>("customUserID")
+
+        coroutineScope.launch {
+            TelemetryDeck.purchaseCompleted(
+                event,
+                countryCode,
+                productID,
+                purchaseType,
+                priceAmountMicros,
+                currencyCode,
+                offerID,
+                params.orEmpty(),
+                customUserID
+            )
+            withContext(Dispatchers.Main) {
+                result.success(null)
+            }
+        }
+    }
+
+    private fun nativeReferralSent(call: MethodCall, result: Result) {
+        val receiversCount = call.argument<Int>("receiversCount")
+        if (receiversCount == null) {
+            result.error("INVALID_ARGUMENT", "receiversCount is required", null)
+            return
+        }
+
+        val kind = call.argument<String?>("kind")
+        val params = call.argument<Map<String, String>>("params")
+        val customUserID = call.argument<String?>("customUserID")
+
+        coroutineScope.launch {
+            TelemetryDeck.referralSent(receiversCount, kind, params.orEmpty(), customUserID)
+            withContext(Dispatchers.Main) {
+                result.success(null)
+            }
+        }
+    }
+
+    private fun nativeUserRatingSubmitted(call: MethodCall, result: Result) {
+        val rating = call.argument<Int>("rating")
+        if (rating == null) {
+            result.error("INVALID_ARGUMENT", "rating is required", null)
+            return
+        }
+
+        val comment = call.argument<String?>("comment")
+        val params = call.argument<Map<String, String>>("params")
+        val customUserID = call.argument<String?>("customUserID")
+
+        coroutineScope.launch {
+            TelemetryDeck.userRatingSubmitted(rating, comment, params.orEmpty(), customUserID)
+            withContext(Dispatchers.Main) {
+                result.success(null)
+            }
+        }
+    }
+
+    private fun nativeErrorOccurred(call: MethodCall, result: Result) {
+        val id = call.argument<String>("id")
+        if (id == null) {
+            result.error("INVALID_ARGUMENT", "id is required", null)
+            return
+        }
+
+        val categoryString = call.argument<String?>("category")
+        val category = when (categoryString) {
+            "thrownException" -> ErrorCategory.ThrownException
+            "userInput" -> ErrorCategory.UserInput
+            "appState" -> ErrorCategory.AppState
+            else -> null
+        }
+
+        val message = call.argument<String?>("message")
+        val parameters = call.argument<Map<String, String>>("parameters")
+        val floatValue = call.argument<Double?>("floatValue")
+        val customUserID = call.argument<String?>("customUserID")
+
+        coroutineScope.launch {
+            TelemetryDeck.errorOccurred(id, category, message, parameters.orEmpty(), floatValue, customUserID)
+            withContext(Dispatchers.Main) {
+                result.success(null)
+            }
         }
     }
 

@@ -25,6 +25,7 @@ class MethodChannelTelemetrydecksdk extends TelemetrydecksdkPlatform {
     String signalType, {
     String? clientUser,
     Map<String, String>? additionalPayload,
+    double? floatValue,
   }) async {
     await methodChannel.invokeMethod<void>(
       'send',
@@ -32,6 +33,7 @@ class MethodChannelTelemetrydecksdk extends TelemetrydecksdkPlatform {
         'signalType': signalType,
         'clientUser': clientUser,
         'additionalPayload': additionalPayload,
+        'floatValue': floatValue,
       },
     );
   }
@@ -90,6 +92,133 @@ class MethodChannelTelemetrydecksdk extends TelemetrydecksdkPlatform {
     await methodChannel.invokeMethod<void>('navigateToDestination', {
       'destinationPath': destinationPath,
       'clientUser': clientUser,
+    });
+  }
+
+  @override
+  Future<void> acquiredUser(String channel,
+      {Map<String, String>? params, String? customUserID}) async {
+    await methodChannel.invokeMethod<void>('acquiredUser', {
+      'channel': channel,
+      'params': params,
+      'customUserID': customUserID,
+    });
+  }
+
+  @override
+  Future<void> leadStarted(String leadId,
+      {Map<String, String>? params, String? customUserID}) async {
+    await methodChannel.invokeMethod<void>('leadStarted', {
+      'leadId': leadId,
+      'params': params,
+      'customUserID': customUserID,
+    });
+  }
+
+  @override
+  Future<void> leadConverted(String leadId,
+      {Map<String, String>? params, String? customUserID}) async {
+    await methodChannel.invokeMethod<void>('leadConverted', {
+      'leadId': leadId,
+      'params': params,
+      'customUserID': customUserID,
+    });
+  }
+
+  @override
+  Future<void> onboardingCompleted(
+      {Map<String, String>? params, String? customUserID}) async {
+    await methodChannel.invokeMethod<void>('onboardingCompleted', {
+      'params': params,
+      'customUserID': customUserID,
+    });
+  }
+
+  @override
+  Future<void> coreFeatureUsed(String featureName,
+      {Map<String, String>? params, String? customUserID}) async {
+    await methodChannel.invokeMethod<void>('coreFeatureUsed', {
+      'featureName': featureName,
+      'params': params,
+      'customUserID': customUserID,
+    });
+  }
+
+  @override
+  Future<void> paywallShown(String reason,
+      {Map<String, String>? params, String? customUserID}) async {
+    await methodChannel.invokeMethod<void>('paywallShown', {
+      'reason': reason,
+      'params': params,
+      'customUserID': customUserID,
+    });
+  }
+
+  @override
+  Future<void> purchaseCompleted(
+      String event,
+      String countryCode,
+      String productID,
+      String purchaseType,
+      int priceAmountMicros,
+      String currencyCode,
+      {String? offerID,
+      Map<String, String>? params,
+      String? customUserID}) async {
+    await methodChannel.invokeMethod<void>('purchaseCompleted', {
+      'event': event,
+      'countryCode': countryCode,
+      'productID': productID,
+      'purchaseType': purchaseType,
+      'priceAmountMicros': priceAmountMicros,
+      'currencyCode': currencyCode,
+      'offerID': offerID,
+      'params': params,
+      'customUserID': customUserID,
+    });
+  }
+
+  @override
+  Future<void> referralSent(
+      {int receiversCount = 1,
+      String? kind,
+      Map<String, String>? params,
+      String? customUserID}) async {
+    await methodChannel.invokeMethod<void>('referralSent', {
+      'receiversCount': receiversCount,
+      'kind': kind,
+      'params': params,
+      'customUserID': customUserID,
+    });
+  }
+
+  @override
+  Future<void> userRatingSubmitted(int rating,
+      {String? comment,
+      Map<String, String>? params,
+      String? customUserID}) async {
+    await methodChannel.invokeMethod<void>('userRatingSubmitted', {
+      'rating': rating,
+      'comment': comment,
+      'params': params,
+      'customUserID': customUserID,
+    });
+  }
+
+  @override
+  Future<void> errorOccurred(String id,
+      {String? category,
+      String? message,
+      Map<String, String>? parameters,
+      double? floatValue,
+      String? customUserID}) async {
+    await methodChannel.invokeMethod<void>('errorOccurred', {
+      'id': id,
+      'category': category,
+      'message': message,
+      'parameters': parameters,
+      'floatValue': floatValue,
+      'customUserID': customUserID,
     });
   }
 }
