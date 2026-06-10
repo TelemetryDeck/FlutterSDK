@@ -12,9 +12,13 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  test:
-    name: Build, Lint and Test the SDK
+  apple:
+    name: Apple build & test (${{ matrix.dependency_manager }})
     runs-on: macos-26
+    strategy:
+      fail-fast: false
+      matrix:
+        dependency_manager: [cocoapods, spm]
     steps:
       - name: Repository checkout
         uses: actions/checkout@v5
@@ -24,6 +28,34 @@ jobs:
           xcode-version: "26.5.0"
       - name: Install Cocoapods
         run: gem install cocoapods
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - name: Select dependency manager
+        run: |
+          if [ "${{ matrix.dependency_manager }}" = "spm" ]; then
+            flutter config --enable-swift-package-manager
+          else
+            flutter config --no-enable-swift-package-manager
+          fi
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Build
+        run: |
+          cd example
+          flutter build ios --release --no-codesign
+          flutter build macos
+      - name: Test macOS
+        run: make test-macos
+        # todo: add iOS testing (with code signing enabled)
+
+  android:
+    name: Android build, lint & test
+    runs-on: macos-26
+    steps:
+      - name: Repository checkout
+        uses: actions/checkout@v5
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -38,13 +70,8 @@ jobs:
       - name: Build
         run: |
           cd example
-          flutter build ios --release --no-codesign
-          flutter build macos
           flutter build apk
       - name: Lint
         run: make checklint
       - name: Test Android
         run: make test-android
-      - name: Test macOS
-        run: make test-macos
-        # todo: add iOS testing (with code signing enabled)

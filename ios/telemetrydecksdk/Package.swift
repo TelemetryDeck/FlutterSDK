@@ -11,7 +11,7 @@ let package = Package(
     ],
     dependencies: [
         .package(name: "FlutterFramework", path: "../FlutterFramework"),
-        .package(url: "https://github.com/TelemetryDeck/SwiftSDK", .upToNextMinor(from: "2.11.0"))
+        .package(url: "https://github.com/TelemetryDeck/SwiftSDK", .upToNextMajor(from: "2.11.0"))
     ],
     targets: [
         .target(
