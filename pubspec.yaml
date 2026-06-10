@@ -8,7 +8,7 @@ documentation: "https://telemetrydeck.com/docs/"
 
 environment:
   sdk: ">=3.2.3 <4.0.0"
-  flutter: ">=3.3.0"
+  flutter: ">=3.41.0"
 
 dependencies:
   flutter:

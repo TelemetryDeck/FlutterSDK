@@ -22,7 +22,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   FlutterMacOS: d0db08ddef1a9af05a5ec4b724367152bb0500b1
   TelemetryDeck: 50c6ddb1031ee91e7828d5f023af1419f9aadcad
-  telemetrydecksdk: 7c31fa86d7ef3f2dbfd4bba0165233de9c1c84f3
+  telemetrydecksdk: e24c1af3aeea6055a2e1b37820c08f5df7a0f21a
 
 PODFILE CHECKSUM: 9ebaf0ce3d369aaa26a9ea0e159195ed94724cf3
 
