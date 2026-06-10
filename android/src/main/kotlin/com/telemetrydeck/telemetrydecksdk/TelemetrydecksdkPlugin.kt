@@ -5,9 +5,14 @@ import android.content.Context
 import com.telemetrydeck.sdk.PurchaseEvent
 import com.telemetrydeck.sdk.PurchaseType
 import com.telemetrydeck.sdk.TelemetryDeck
+import com.telemetrydeck.sdk.TelemetryDeckProvider
 import com.telemetrydeck.sdk.params.ErrorCategory
+import com.telemetrydeck.sdk.providers.AccessibilityProvider
+import com.telemetrydeck.sdk.providers.CalendarParameterProvider
 import com.telemetrydeck.sdk.providers.DefaultParameterProvider
 import com.telemetrydeck.sdk.providers.DefaultPrefixProvider
+import com.telemetrydeck.sdk.providers.EnvironmentParameterProvider
+import com.telemetrydeck.sdk.providers.PlatformContextProvider
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -524,7 +529,7 @@ class TelemetrydecksdkPlugin : FlutterPlugin, MethodCallHandler {
             }
 
             if (defaultParameters != null) {
-                builder.addProvider(DefaultParameterProvider(defaultParameters))
+                builder.providers(listOf(DefaultParameterProvider(defaultParameters)) + nativeEnrichmentProviders())
             }
 
             val application = applicationContext as Application
@@ -534,6 +539,13 @@ class TelemetrydecksdkPlugin : FlutterPlugin, MethodCallHandler {
             result.error("INVALID_ARGUMENT", "Arguments are not a map", null)
         }
     }
+
+    private fun nativeEnrichmentProviders(): List<TelemetryDeckProvider> = listOf(
+        EnvironmentParameterProvider(),
+        PlatformContextProvider(),
+        AccessibilityProvider(),
+        CalendarParameterProvider(),
+    )
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         channel.setMethodCallHandler(null)
