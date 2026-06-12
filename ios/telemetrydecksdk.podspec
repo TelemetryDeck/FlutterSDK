@@ -13,10 +13,10 @@ Flutter SDK for TelemetryDeck, a privacy-conscious analytics service for apps an
   s.license          = { :file => '../LICENSE' }
   s.author           = { 'TelemetryDeck' => 'info@telemetrydeck.com' }
   s.source           = { :path => '.' }
-  s.source_files = 'Classes/**/*'
+  s.source_files = 'telemetrydecksdk/Sources/telemetrydecksdk/**/*'
   s.dependency 'Flutter'
-  s.dependency 'TelemetryDeck', '~> 2.11.0'
-  s.platform = :ios, '12.0'
+  s.dependency 'TelemetryDeck', '~> 2.11'
+  s.platform = :ios, '13.0'
 
   # Flutter.framework does not contain a i386 slice.
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }
