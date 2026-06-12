@@ -1,3 +1,21 @@
+## 4.0.0
+
+- https://github.com/TelemetryDeck/FlutterSDK/releases/tag/4.0.0
+
+
+- **Swift Package Manager support** The iOS and macOS plugins now ship as Swift packages, so they integrate with Flutter's SwiftPM-based plugin resolution. While CocoaPods continues to work, we recommend that you try to switch to SPM as soon as possible.
+
+- [Android] The KotlinSDK has been updated to [7.0.0](https://github.com/TelemetryDeck/KotlinSDK/releases/tag/7.0.0).
+
+
+- [BREAKING] **Minimum platform versions have been raised:**
+  - Flutter: now requires `>=3.41.0`
+  - iOS: minimum deployment target raised to **iOS 13.0** (was 12.0)
+  - macOS: minimum deployment target raised to **macOS 10.15** (was 10.11)
+  - Android: `minSdkVersion` raised to **23** (was 21)
+
+- [Android] The toolchain has moved to Kotlin **2.3.21** and Android Gradle Plugin **9.2.1**. If you pin these in your app's `build.gradle`, update `ext.kotlin_version = '2.3.21'` and your AGP version accordingly.
+
 ## 3.0.0
 
 - https://github.com/TelemetryDeck/FlutterSDK/releases/tag/3.0.0
