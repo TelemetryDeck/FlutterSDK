@@ -15,6 +15,11 @@ jobs:
   apple:
     name: Apple build & test (${{ matrix.dependency_manager }})
     runs-on: macos-26
+    # Swift Package Manager derives the plugin's package identity from the checkout
+    # directory name, which must match the package name `telemetrydecksdk`.
+    defaults:
+      run:
+        working-directory: telemetrydecksdk
     strategy:
       fail-fast: false
       matrix:
@@ -22,6 +27,8 @@ jobs:
     steps:
       - name: Repository checkout
         uses: actions/checkout@v5
+        with:
+          path: telemetrydecksdk
       - name: Setup Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
