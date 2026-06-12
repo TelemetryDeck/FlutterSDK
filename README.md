@@ -21,6 +21,7 @@ void main() {
   Telemetrydecksdk.start(
     const TelemetryManagerConfiguration(
       appID: "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
+      namespace: "my-namespace",
     ),
   );
 
@@ -152,6 +153,7 @@ If you want to manually control whether test mode is active, you can set the `te
 Telemetrydecksdk.start(
   TelemetryManagerConfiguration(
     appID: "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
+    namespace: "my-namespace",
     testMode: true,
   ),
 );
@@ -171,6 +173,7 @@ If you'd like to use a custom salt, you can do so by passing it on to the starti
 Telemetrydecksdk.start(
   TelemetryManagerConfiguration(
     appID: "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
+    namespace: "my-namespace",
     salt: "<A RANDOM STRING>",
   ),
 );
@@ -184,6 +187,7 @@ A very small subset of our customers will want to use a custom signal ingestion 
 Telemetrydecksdk.start(
   TelemetryManagerConfiguration(
     appID: "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
+    namespace: "my-namespace",
     apiBaseURL: "https://nom.telemetrydeck.com",
   ),
 );
@@ -198,6 +202,7 @@ void main() {
   Telemetrydecksdk.start(
     TelemetryManagerConfiguration(
       appID: "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
+      namespace: "my-namespace",
       debug: true,
     ),
   );
