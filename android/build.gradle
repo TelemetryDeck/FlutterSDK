@@ -2,7 +2,7 @@ group 'com.telemetrydeck.telemetrydecksdk'
 version '1.0-SNAPSHOT'
 
 buildscript {
-    ext.kotlin_version = '2.3.21'
+    ext.kotlin_version = '2.4.10'
     repositories {
         google()
         mavenCentral()
@@ -25,9 +25,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
-    if (project.android.hasProperty("namespace")) {
-        namespace 'com.telemetrydeck.telemetrydecksdk'
-    }
+    namespace 'com.telemetrydeck.telemetrydecksdk'
 
      compileSdk = 36
 
@@ -42,7 +40,7 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion 23
+        minSdkVersion 24
     }
 
     testOptions {
@@ -63,7 +61,7 @@ dependencies {
     implementation 'com.telemetrydeck:kotlin-sdk:7.0.0'
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
-    testImplementation 'org.jetbrains.kotlin:kotlin-reflect:2.3.21'
+    testImplementation 'org.jetbrains.kotlin:kotlin-reflect:2.4.10'
     testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.2'
     testImplementation 'androidx.arch.core:core-testing:2.2.0'
 }

@@ -1,3 +1,13 @@
+## Unreleased
+
+- [BREAKING] **Minimum platform versions have been raised:**
+  - Flutter: now requires `>=3.47.0` (Dart `^3.13.0`)
+  - iOS: minimum deployment target raised to **iOS 15.0** (was 13.0)
+  - macOS: minimum deployment target raised to **macOS 12.0** (was 10.15)
+  - Android: `minSdkVersion` raised to **24** (was 23)
+
+- [Android] The toolchain now requires Kotlin **2.4.10**, Android Gradle Plugin **9.2.1**, Gradle **9.5**, Java **17** and `compileSdk` **36**. If you pin these in your app's `build.gradle`, update `ext.kotlin_version = '2.4.10'` and your AGP version accordingly.
+
 ## 4.0.0
 
 - https://github.com/TelemetryDeck/FlutterSDK/releases/tag/4.0.0

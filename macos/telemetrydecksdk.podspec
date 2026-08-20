@@ -18,7 +18,7 @@ Flutter SDK for TelemetryDeck, a privacy-conscious analytics service for apps an
   s.dependency 'FlutterMacOS'
   s.dependency 'TelemetryDeck', '~> 2.11'
 
-  s.platform = :osx, '10.15'
+  s.platform = :osx, '12.0'
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
-  s.swift_version = '5.0'
+  s.swift_version = '5.9'
 end
