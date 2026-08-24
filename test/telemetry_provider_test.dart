@@ -12,10 +12,7 @@ void main() {
       result,
       containsPair('TelemetryDeck.SDK.version', telemetryClientVersion),
     );
-    expect(
-      result,
-      containsPair('TelemetryDeck.SDK.name', 'Flutter SDK'),
-    );
+    expect(result, containsPair('TelemetryDeck.SDK.name', 'Flutter SDK'));
     expect(result, containsPair('TelemetryDeck.SDK.dartVersion', isNotNull));
   });
 }

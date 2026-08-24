@@ -6,7 +6,7 @@
   - macOS: minimum deployment target raised to **macOS 12.0** (was 10.15)
   - Android: `minSdkVersion` raised to **24** (was 23)
 
-- [Android] The toolchain now requires Kotlin **2.4.10**, Android Gradle Plugin **9.2.1**, Gradle **9.5**, Java **17** and `compileSdk` **36**. If you pin these in your app's `build.gradle`, update `ext.kotlin_version = '2.4.10'` and your AGP version accordingly.
+- [Android] The toolchain now requires Kotlin **2.4.10** (was 2.3.21). If you pin this in your app's `build.gradle`, update `ext.kotlin_version = '2.4.10'`.
 
 ## 4.0.0
 
