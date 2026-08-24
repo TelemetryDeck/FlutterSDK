@@ -4,7 +4,7 @@ import PackageDescription
 let package = Package(
     name: "telemetrydecksdk",
     platforms: [
-        .macOS("10.15")
+        .macOS("12.0")
     ],
     products: [
         .library(name: "telemetrydecksdk", targets: ["telemetrydecksdk"])

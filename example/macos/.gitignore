@@ -5,3 +5,5 @@
 # Xcode-related
 **/dgph
 **/xcuserdata/
+**/xcshareddata/swiftpm/
+Runner/Configs/Local.xcconfig

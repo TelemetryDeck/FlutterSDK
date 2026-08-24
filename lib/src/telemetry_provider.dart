@@ -4,9 +4,7 @@ import 'package:telemetrydecksdk/src/versions.dart';
 class TelemetryProvider {
   final DartVersionReader versionReader;
 
-  const TelemetryProvider({
-    this.versionReader = const DartVersionReader(),
-  });
+  const TelemetryProvider({this.versionReader = const DartVersionReader()});
 
   /// Adds Flutter specific payload attributes to outgoing signals before passing them to the native platform API.
   /// This method will overwrite the default `telemetryClientVersion`.

@@ -28,17 +28,18 @@ class TelemetryManagerConfiguration {
   final String? defaultParameterPrefix;
   final Map<String, String>? defaultParameters;
 
-  const TelemetryManagerConfiguration(
-      {required this.appID,
-      this.apiBaseURL,
-      this.defaultUser,
-      this.debug,
-      this.testMode,
-      this.salt,
-      this.defaultSignalPrefix,
-      this.defaultParameterPrefix,
-      this.defaultParameters,
-      this.namespace});
+  const TelemetryManagerConfiguration({
+    required this.appID,
+    this.apiBaseURL,
+    this.defaultUser,
+    this.debug,
+    this.testMode,
+    this.salt,
+    this.defaultSignalPrefix,
+    this.defaultParameterPrefix,
+    this.defaultParameters,
+    this.namespace,
+  });
 
   /// to map
   Map<String, dynamic> toMap() {
@@ -52,7 +53,7 @@ class TelemetryManagerConfiguration {
       'defaultSignalPrefix': defaultSignalPrefix,
       'defaultParameterPrefix': defaultParameterPrefix,
       'defaultParameters': defaultParameters,
-      'namespace': namespace
+      'namespace': namespace,
     };
   }
 
@@ -60,15 +61,16 @@ class TelemetryManagerConfiguration {
     Map<String, String>? defaultParameters,
   }) {
     return TelemetryManagerConfiguration(
-        appID: appID,
-        apiBaseURL: apiBaseURL,
-        defaultUser: defaultUser,
-        debug: debug,
-        testMode: testMode,
-        salt: salt,
-        defaultSignalPrefix: defaultSignalPrefix,
-        defaultParameterPrefix: defaultParameterPrefix,
-        defaultParameters: defaultParameters ?? this.defaultParameters,
-        namespace: namespace);
+      appID: appID,
+      apiBaseURL: apiBaseURL,
+      defaultUser: defaultUser,
+      debug: debug,
+      testMode: testMode,
+      salt: salt,
+      defaultSignalPrefix: defaultSignalPrefix,
+      defaultParameterPrefix: defaultParameterPrefix,
+      defaultParameters: defaultParameters ?? this.defaultParameters,
+      namespace: namespace,
+    );
   }
 }
