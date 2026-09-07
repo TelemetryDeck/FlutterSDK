@@ -1,4 +1,4 @@
-## 5.0.0
+## 5.0.1
 
 - [BREAKING] **Minimum platform versions have been raised:**
   - Flutter: now requires `>=3.47.0` (Dart `^3.13.0`)
