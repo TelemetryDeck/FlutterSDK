@@ -15,24 +15,24 @@ class RunnerTests: XCTestCase {
 
     override func tearDown() {
         plugin = nil
-        if TelemetryManager.isInitialized {
-            TelemetryDeck.terminate()
-        }
         super.tearDown()
     }
 
-    func testStart_withRequiredAppID() {
+    func testStart_withRequiredAppID() async {
         let call = FlutterMethodCall(methodName: "start", arguments: [
-            "appID": "32CB6574-6732-4238-879F-582FEBEB6536"
+            "appID": "32CB6574-6732-4238-879F-582FEBEB6536",
+            "namespace": "testNamespace"
         ])
 
         let expectation = expectation(description: "start completes")
         plugin.handle(call) { result in
             XCTAssertNil(result)
-            XCTAssertTrue(TelemetryManager.isInitialized)
             expectation.fulfill()
         }
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
+
+        let sessionID = await TelemetryDeck.sessionID
+        XCTAssertNotNil(sessionID)
     }
 
     func testStart_withMissingAppID_returnsError() {
@@ -51,7 +51,7 @@ class RunnerTests: XCTestCase {
         waitForExpectations(timeout: 1)
     }
 
-    func testStart_withOptionalParameters() {
+    func testStart_withOptionalParameters() async {
         let call = FlutterMethodCall(methodName: "start", arguments: [
             "appID": "32CB6574-6732-4238-879F-582FEBEB6536",
             "apiBaseURL": "https://nom.telemetrydeck.com",
@@ -68,10 +68,12 @@ class RunnerTests: XCTestCase {
         let expectation = expectation(description: "start completes with options")
         plugin.handle(call) { result in
             XCTAssertNil(result)
-            XCTAssertTrue(TelemetryManager.isInitialized)
             expectation.fulfill()
         }
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
+
+        let sessionID = await TelemetryDeck.sessionID
+        XCTAssertNotNil(sessionID)
     }
 
     func testStop() {
@@ -84,7 +86,7 @@ class RunnerTests: XCTestCase {
             XCTAssertNil(result)
             expectation.fulfill()
         }
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     func testSend_withRequiredSignalType() {

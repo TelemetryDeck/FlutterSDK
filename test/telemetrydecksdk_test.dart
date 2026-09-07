@@ -148,6 +148,7 @@ void main() {
 
     const configuration = TelemetryManagerConfiguration(
       appID: "XXXX-XXXX-XXXXX",
+      namespace: "my-namespace",
     );
 
     // if no exception occures the test will pass
