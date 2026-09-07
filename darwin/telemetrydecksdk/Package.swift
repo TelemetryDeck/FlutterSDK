@@ -4,14 +4,15 @@ import PackageDescription
 let package = Package(
     name: "telemetrydecksdk",
     platforms: [
-        .iOS("15.0")
+        .iOS("15.0"),
+        .macOS("12.0")
     ],
     products: [
         .library(name: "telemetrydecksdk", targets: ["telemetrydecksdk"])
     ],
     dependencies: [
         .package(name: "FlutterFramework", path: "../FlutterFramework"),
-        .package(url: "https://github.com/TelemetryDeck/SwiftSDK", .upToNextMajor(from: "2.11.0"))
+        .package(url: "https://github.com/TelemetryDeck/SwiftSDK", exact: "3.0.0-beta.5")
     ],
     targets: [
         .target(

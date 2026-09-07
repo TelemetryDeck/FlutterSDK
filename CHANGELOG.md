@@ -1,4 +1,4 @@
-## Unreleased
+## 5.0.0
 
 - [BREAKING] **Minimum platform versions have been raised:**
   - Flutter: now requires `>=3.47.0` (Dart `^3.13.0`)
@@ -6,7 +6,15 @@
   - macOS: minimum deployment target raised to **macOS 12.0** (was 10.15)
   - Android: `minSdkVersion` raised to **24** (was 23)
 
-- [Android] The toolchain now requires Kotlin **2.4.10** (was 2.3.21). If you pin this in your app's `build.gradle`, update `ext.kotlin_version = '2.4.10'`.
+- [BREAKING] **CocoaPods support has been removed.** The library requires Flutter's Swift Package Manager integration, which is enabled by default since Flutter 3.44.
+
+- [iOS/macOS] The SwiftSDK has been updated to [3.0.0-beta.5](https://github.com/TelemetryDeck/SwiftSDK/releases/tag/3.0.0-beta.5).
+
+- [BREAKING] **`namespace` is now a required parameter.**
+
+- [Android] The KotlinSDK has been updated to [7.2.0](https://github.com/TelemetryDeck/KotlinSDK/releases/tag/7.2.0). 
+
+- [Android] The toolchain now requires Kotlin **2.4.10**. If you pin this in your app's `build.gradle`, update `ext.kotlin_version = '2.4.10'`.
 
 ## 4.0.0
 

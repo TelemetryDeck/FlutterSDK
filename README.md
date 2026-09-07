@@ -29,6 +29,8 @@ void main() {
 }
 ```
 
+- `namespace` is required.
+
 ### Permission for internet access
 
 Sending signals requires access to the internet so the following permissions should be granted. For more information, you can check [Flutter Cross-platform HTTP networking ](https://docs.flutter.dev/data-and-backend/networking).

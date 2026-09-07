@@ -4,16 +4,93 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.telemetrydeck.sdk.Signal
 import com.telemetrydeck.sdk.TelemetryDeck
 import com.telemetrydeck.sdk.TelemetryManagerConfiguration
+import io.flutter.plugin.common.MethodCall
+import io.flutter.plugin.common.MethodChannel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
+import kotlinx.serialization.json.jsonPrimitive
+import org.junit.After
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class TelemetrydecksdkPluginTest {
 
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
+
+    @Before
+    fun setUpMainDispatcher() {
+        Dispatchers.setMain(UnconfinedTestDispatcher())
+    }
+
+    @After
+    fun tearDownMainDispatcher() {
+        Dispatchers.resetMain()
+    }
+
+    private class CapturingResult : MethodChannel.Result {
+        var successCalled = false
+        var errorCode: String? = null
+        var notImplementedCalled = false
+        val latch = CountDownLatch(1)
+
+        override fun success(result: Any?) {
+            successCalled = true
+            latch.countDown()
+        }
+
+        override fun error(errorCode: String, errorMessage: String?, errorDetails: Any?) {
+            this.errorCode = errorCode
+            latch.countDown()
+        }
+
+        override fun notImplemented() {
+            notImplementedCalled = true
+            latch.countDown()
+        }
+    }
+
+    @Test
+    fun testUnknownMethodIsNotImplemented() {
+        val plugin = TelemetrydecksdkPlugin()
+        val result = CapturingResult()
+
+        plugin.onMethodCall(MethodCall("unknownMethod", null), result)
+
+        assertTrue(result.notImplementedCalled)
+    }
+
+    @Test
+    fun testStartWithoutAppIdReturnsInvalidArgumentError() {
+        val plugin = TelemetrydecksdkPlugin()
+        val result = CapturingResult()
+
+        plugin.onMethodCall(MethodCall("start", mapOf("debug" to true)), result)
+
+        assertEquals("INVALID_ARGUMENT", result.errorCode)
+    }
+
+    @Test
+    fun testNavigateDeliversResultThroughCoroutine() {
+        val plugin = TelemetrydecksdkPlugin()
+        val result = CapturingResult()
+        val args = mapOf("sourcePath" to "/home", "destinationPath" to "/profile")
+
+        plugin.onMethodCall(MethodCall("navigate", args), result)
+
+        assertTrue(result.latch.await(5, TimeUnit.SECONDS))
+        assertTrue(result.successCalled)
+    }
 
     @Test
     fun testSignalBasicProperties() {
@@ -107,8 +184,7 @@ class TelemetrydecksdkPluginTest {
         val signal = manager.cache?.empty()?.first()
         assertNotNull(signal)
 
-        val payloadItem = signal.payload.firstOrNull { it.startsWith("customParam:") }
-        assertEquals("customParam:customValue", payloadItem)
+        assertEquals("customValue", signal.payload["customParam"]?.jsonPrimitive?.content)
     }
 
     @Test
@@ -123,11 +199,8 @@ class TelemetrydecksdkPluginTest {
         assertNotNull(signal)
         assertEquals("TelemetryDeck.Navigation.pathChanged", signal.type)
 
-        val sourcePath = signal.payload.firstOrNull { it.startsWith("TelemetryDeck.Navigation.sourcePath:") }
-        assertEquals("TelemetryDeck.Navigation.sourcePath:/home", sourcePath)
-
-        val destinationPath = signal.payload.firstOrNull { it.startsWith("TelemetryDeck.Navigation.destinationPath:") }
-        assertEquals("TelemetryDeck.Navigation.destinationPath:/profile", destinationPath)
+        assertEquals("/home", signal.payload["TelemetryDeck.Navigation.sourcePath"]?.jsonPrimitive?.content)
+        assertEquals("/profile", signal.payload["TelemetryDeck.Navigation.destinationPath"]?.jsonPrimitive?.content)
     }
 
     @Test
@@ -150,10 +223,10 @@ class TelemetrydecksdkPluginTest {
         assertEquals("Export.Completed", signal.type)
         assertEquals(123.45, signal.floatValue)
 
-        assertEquals("feature:export", signal.payload.firstOrNull { it.startsWith("feature:") })
-        assertEquals("format:pdf", signal.payload.firstOrNull { it.startsWith("format:") })
-        assertEquals("pages:10", signal.payload.firstOrNull { it.startsWith("pages:") })
-        assertEquals("quality:high", signal.payload.firstOrNull { it.startsWith("quality:") })
+        assertEquals("export", signal.payload["feature"]?.jsonPrimitive?.content)
+        assertEquals("pdf", signal.payload["format"]?.jsonPrimitive?.content)
+        assertEquals("10", signal.payload["pages"]?.jsonPrimitive?.content)
+        assertEquals("high", signal.payload["quality"]?.jsonPrimitive?.content)
     }
 
     @Test
@@ -210,10 +283,7 @@ class TelemetrydecksdkPluginTest {
         val signal = manager.cache?.empty()?.first()
         assertNotNull(signal)
         assertEquals("TelemetryDeck.Acquisition.userAcquired", signal.type)
-        assertEquals(
-            "TelemetryDeck.Acquisition.channel:channel 1",
-            signal.payload.firstOrNull { it.startsWith("TelemetryDeck.Acquisition.channel:") }
-        )
+        assertEquals("channel 1", signal.payload["TelemetryDeck.Acquisition.channel"]?.jsonPrimitive?.content)
     }
 
     @Test
@@ -226,10 +296,7 @@ class TelemetrydecksdkPluginTest {
         val signal = manager.cache?.empty()?.first()
         assertNotNull(signal)
         assertEquals("TelemetryDeck.Acquisition.leadStarted", signal.type)
-        assertEquals(
-            "TelemetryDeck.Acquisition.leadID:lead 1",
-            signal.payload.firstOrNull { it.startsWith("TelemetryDeck.Acquisition.leadID:") }
-        )
+        assertEquals("lead 1", signal.payload["TelemetryDeck.Acquisition.leadID"]?.jsonPrimitive?.content)
     }
 
     @Test
@@ -242,10 +309,7 @@ class TelemetrydecksdkPluginTest {
         val signal = manager.cache?.empty()?.first()
         assertNotNull(signal)
         assertEquals("TelemetryDeck.Acquisition.leadConverted", signal.type)
-        assertEquals(
-            "TelemetryDeck.Acquisition.leadID:lead 1",
-            signal.payload.firstOrNull { it.startsWith("TelemetryDeck.Acquisition.leadID:") }
-        )
+        assertEquals("lead 1", signal.payload["TelemetryDeck.Acquisition.leadID"]?.jsonPrimitive?.content)
     }
 
     @Test
@@ -258,10 +322,7 @@ class TelemetrydecksdkPluginTest {
         val signal = manager.cache?.empty()?.first()
         assertNotNull(signal)
         assertEquals("TelemetryDeck.Activation.coreFeatureUsed", signal.type)
-        assertEquals(
-            "TelemetryDeck.Activation.featureName:feature 1",
-            signal.payload.firstOrNull { it.startsWith("TelemetryDeck.Activation.featureName:") }
-        )
+        assertEquals("feature 1", signal.payload["TelemetryDeck.Activation.featureName"]?.jsonPrimitive?.content)
     }
 
     @Test
@@ -274,9 +335,6 @@ class TelemetrydecksdkPluginTest {
         val signal = manager.cache?.empty()?.first()
         assertNotNull(signal)
         assertEquals("TelemetryDeck.Revenue.paywallShown", signal.type)
-        assertEquals(
-            "TelemetryDeck.Revenue.paywallShowReason:trial_ended",
-            signal.payload.firstOrNull { it.startsWith("TelemetryDeck.Revenue.paywallShowReason:") }
-        )
+        assertEquals("trial_ended", signal.payload["TelemetryDeck.Revenue.paywallShowReason"]?.jsonPrimitive?.content)
     }
 }

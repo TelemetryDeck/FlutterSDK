@@ -5,14 +5,9 @@ import android.content.Context
 import com.telemetrydeck.sdk.PurchaseEvent
 import com.telemetrydeck.sdk.PurchaseType
 import com.telemetrydeck.sdk.TelemetryDeck
-import com.telemetrydeck.sdk.TelemetryDeckProvider
 import com.telemetrydeck.sdk.params.ErrorCategory
-import com.telemetrydeck.sdk.providers.AccessibilityProvider
-import com.telemetrydeck.sdk.providers.CalendarParameterProvider
 import com.telemetrydeck.sdk.providers.DefaultParameterProvider
 import com.telemetrydeck.sdk.providers.DefaultPrefixProvider
-import com.telemetrydeck.sdk.providers.EnvironmentParameterProvider
-import com.telemetrydeck.sdk.providers.PlatformContextProvider
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -20,6 +15,7 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -32,7 +28,7 @@ class TelemetrydecksdkPlugin : FlutterPlugin, MethodCallHandler {
     private lateinit var channel: MethodChannel
     private var applicationContext: Context? = null
     private val coroutineScope =
-        CoroutineScope(Dispatchers.IO) // Coroutine scope for background tasks
+        CoroutineScope(SupervisorJob() + Dispatchers.IO) // Coroutine scope for background tasks
 
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         applicationContext = flutterPluginBinding.applicationContext
@@ -361,7 +357,7 @@ class TelemetrydecksdkPlugin : FlutterPlugin, MethodCallHandler {
         val countryCode = call.argument<String>("countryCode")
         val productID = call.argument<String>("productID")
         val purchaseTypeString = call.argument<String>("purchaseType")
-        val priceAmountMicros = call.argument<Long>("priceAmountMicros")
+        val priceAmountMicros = call.argument<Number>("priceAmountMicros")?.toLong()
         val currencyCode = call.argument<String>("currencyCode")
 
         if (eventString == null || countryCode == null || productID == null ||
@@ -529,7 +525,7 @@ class TelemetrydecksdkPlugin : FlutterPlugin, MethodCallHandler {
             }
 
             if (defaultParameters != null) {
-                builder.providers(listOf(DefaultParameterProvider(defaultParameters)) + nativeEnrichmentProviders())
+                builder.addProvider(DefaultParameterProvider(defaultParameters))
             }
 
             val application = applicationContext as Application
@@ -539,13 +535,6 @@ class TelemetrydecksdkPlugin : FlutterPlugin, MethodCallHandler {
             result.error("INVALID_ARGUMENT", "Arguments are not a map", null)
         }
     }
-
-    private fun nativeEnrichmentProviders(): List<TelemetryDeckProvider> = listOf(
-        EnvironmentParameterProvider(),
-        PlatformContextProvider(),
-        AccessibilityProvider(),
-        CalendarParameterProvider(),
-    )
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         channel.setMethodCallHandler(null)

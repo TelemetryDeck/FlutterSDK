@@ -19,11 +19,9 @@ The Flutter SDK depends on the latest major version of the native SDKs. This is 
 On Android, the dependency is configured in `android/build.gradle`:
 
 ```
-implementation 'com.telemetrydeck:kotlin-sdk:6.3.0'
+implementation 'com.telemetrydeck:kotlin-sdk:7.2.0'
 ```
 
-On iOS, the dependency is configured in `ios/telemetrydecksdk.podspec` using the podspect Dependency format `s.dependency 'TelemetryClient', '~> 2.0'`.
+On iOS and macOS, the dependency is configured in `darwin/telemetrydecksdk/Package.swift` using the Swift Package Manager dependency format `.package(url: "https://github.com/TelemetryDeck/SwiftSDK", exact: "3.0.0-beta.5")`.
 
-On macOS, the dependency is configured in `macos/telemetrydecksdk.podspec` using the podspect Dependency format `s.dependency 'TelemetryClient', '~> 2.0'`.
-
-Note: CocoaPods requires running `pod update` to fetch the latest version of the native SDK for both iOS and macOS. You can do so in the ios and macOS folders of the example project.
+Note: Flutter's Swift Package Manager integration resolves the SwiftSDK dependency when building the example app, updating the `Package.resolved` files in the ios and macos folders of the example project accordingly.

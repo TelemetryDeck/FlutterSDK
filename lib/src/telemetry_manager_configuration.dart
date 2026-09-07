@@ -22,7 +22,8 @@ class TelemetryManagerConfiguration {
 
   final String? salt;
 
-  final String? namespace;
+  /// The namespace of your organisation.
+  final String namespace;
 
   final String? defaultSignalPrefix;
   final String? defaultParameterPrefix;
@@ -38,7 +39,7 @@ class TelemetryManagerConfiguration {
     this.defaultSignalPrefix,
     this.defaultParameterPrefix,
     this.defaultParameters,
-    this.namespace,
+    required this.namespace,
   });
 
   /// to map
