@@ -1,5 +1,8 @@
+#if os(macOS)
+import FlutterMacOS
+#else
 import Flutter
-import UIKit
+#endif
 import XCTest
 import TelemetryDeck
 
@@ -14,6 +17,11 @@ class RunnerTests: XCTestCase {
     }
 
     override func tearDown() {
+        let expectation = expectation(description: "stop completes")
+        plugin.handle(FlutterMethodCall(methodName: "stop", arguments: nil)) { _ in
+            expectation.fulfill()
+        }
+        waitForExpectations(timeout: 10)
         plugin = nil
         super.tearDown()
     }
@@ -29,7 +37,7 @@ class RunnerTests: XCTestCase {
             XCTAssertNil(result)
             expectation.fulfill()
         }
-        waitForExpectations(timeout: 5)
+        await fulfillment(of: [expectation], timeout: 5)
 
         let sessionID = await TelemetryDeck.sessionID
         XCTAssertNotNil(sessionID)
@@ -46,6 +54,24 @@ class RunnerTests: XCTestCase {
             }
             XCTAssertEqual(error.code, "INVALID_ARGUMENT")
             XCTAssertEqual(error.message, "Expected value appID is not provided.")
+            expectation.fulfill()
+        }
+        waitForExpectations(timeout: 1)
+    }
+
+    func testStart_withMissingNamespace_returnsError() {
+        let call = FlutterMethodCall(methodName: "start", arguments: [
+            "appID": "32CB6574-6732-4238-879F-582FEBEB6536"
+        ])
+
+        let expectation = expectation(description: "start returns error")
+        plugin.handle(call) { result in
+            guard let error = result as? FlutterError else {
+                XCTFail("Expected FlutterError")
+                return
+            }
+            XCTAssertEqual(error.code, "INVALID_ARGUMENT")
+            XCTAssertEqual(error.message, "Expected value namespace is not provided.")
             expectation.fulfill()
         }
         waitForExpectations(timeout: 1)
@@ -70,7 +96,7 @@ class RunnerTests: XCTestCase {
             XCTAssertNil(result)
             expectation.fulfill()
         }
-        waitForExpectations(timeout: 5)
+        await fulfillment(of: [expectation], timeout: 5)
 
         let sessionID = await TelemetryDeck.sessionID
         XCTAssertNotNil(sessionID)
@@ -85,6 +111,33 @@ class RunnerTests: XCTestCase {
         plugin.handle(call) { result in
             XCTAssertNil(result)
             expectation.fulfill()
+        }
+        waitForExpectations(timeout: 5)
+    }
+
+    func testStartImmediatelyAfterStop_leavesSDKRunning() {
+        initializeSDK()
+
+        let stopped = expectation(description: "stop completes")
+        plugin.handle(FlutterMethodCall(methodName: "stop", arguments: nil)) { _ in
+            stopped.fulfill()
+        }
+        let started = expectation(description: "start completes")
+        plugin.handle(FlutterMethodCall(methodName: "start", arguments: [
+            "appID": "32CB6574-6732-4238-879F-582FEBEB6536",
+            "namespace": "testNamespace",
+            "testMode": true
+        ])) { result in
+            XCTAssertNil(result)
+            started.fulfill()
+        }
+        waitForExpectations(timeout: 10)
+
+        let sessionChecked = expectation(description: "session is active")
+        Task {
+            let sessionID = await TelemetryDeck.sessionID
+            XCTAssertNotNil(sessionID)
+            sessionChecked.fulfill()
         }
         waitForExpectations(timeout: 5)
     }
@@ -777,8 +830,15 @@ class RunnerTests: XCTestCase {
     private func initializeSDK() {
         let call = FlutterMethodCall(methodName: "start", arguments: [
             "appID": "32CB6574-6732-4238-879F-582FEBEB6536",
+            "namespace": "testNamespace",
             "testMode": true
         ])
-        plugin.handle(call) { _ in }
+
+        let expectation = expectation(description: "start completes")
+        plugin.handle(call) { result in
+            XCTAssertNil(result)
+            expectation.fulfill()
+        }
+        waitForExpectations(timeout: 5)
     }
 }

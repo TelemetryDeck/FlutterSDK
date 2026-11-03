@@ -12,7 +12,7 @@ let package = Package(
     ],
     dependencies: [
         .package(name: "FlutterFramework", path: "../FlutterFramework"),
-        .package(url: "https://github.com/TelemetryDeck/SwiftSDK", exact: "3.0.0-beta.5")
+        .package(url: "https://github.com/TelemetryDeck/SwiftSDK", exact: "3.0.0-beta.6")
     ],
     targets: [
         .target(

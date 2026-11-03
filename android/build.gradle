@@ -22,7 +22,6 @@ allprojects {
 }
 
 apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
 
 android {
     namespace 'com.telemetrydeck.telemetrydecksdk'
@@ -58,7 +57,7 @@ kotlin {
 }
 
 dependencies {
-    implementation 'com.telemetrydeck:kotlin-sdk:7.2.0'
+    implementation 'com.telemetrydeck:kotlin-sdk:7.3.1'
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
     testImplementation 'org.jetbrains.kotlin:kotlin-reflect:2.4.10'

@@ -13,15 +13,15 @@ abstract class Telemetrydecksdk {
 
   static const _telemetryProvider = TelemetryProvider();
 
+  static Map<String, String> _stringify(Map<String, dynamic>? values) =>
+      (values ?? {}).map((key, value) => MapEntry(key, value.toString()));
+
   static Future<void> start(TelemetryManagerConfiguration configuration) async {
     final enrichedDefaultParameters = await _telemetryProvider.enrich(
       configuration.defaultParameters,
     );
-    final stringifiedeParams = enrichedDefaultParameters.map(
-      (key, value) => MapEntry(key, value.toString()),
-    );
     final enrichedConfiguration = configuration.copyWith(
-      defaultParameters: stringifiedeParams,
+      defaultParameters: _stringify(enrichedDefaultParameters),
     );
     await TelemetrydecksdkPlatform.instance.start(enrichedConfiguration);
   }
@@ -36,16 +36,10 @@ abstract class Telemetrydecksdk {
     Map<String, dynamic>? additionalPayload,
     double? floatValue,
   }) async {
-    final payload = additionalPayload ?? {};
-
-    final stringifiedPayload = payload.map(
-      (key, value) => MapEntry(key, value.toString()),
-    );
-
     await TelemetrydecksdkPlatform.instance.send(
       signalType,
       clientUser: clientUser,
-      additionalPayload: stringifiedPayload,
+      additionalPayload: _stringify(additionalPayload),
       floatValue: floatValue,
     );
   }
@@ -54,15 +48,9 @@ abstract class Telemetrydecksdk {
     String signalType, {
     Map<String, String>? parameters,
   }) async {
-    final payload = parameters ?? {};
-
-    final stringifiedPayload = payload.map(
-      (key, value) => MapEntry(key, value.toString()),
-    );
-
     await TelemetrydecksdkPlatform.instance.startDurationSignal(
       signalType,
-      parameters: stringifiedPayload,
+      parameters: parameters ?? {},
     );
   }
 
@@ -70,15 +58,9 @@ abstract class Telemetrydecksdk {
     String signalType, {
     Map<String, String>? parameters,
   }) async {
-    final payload = parameters ?? {};
-
-    final stringifiedPayload = payload.map(
-      (key, value) => MapEntry(key, value.toString()),
-    );
-
     await TelemetrydecksdkPlatform.instance.stopAndSendDurationSignal(
       signalType,
-      parameters: stringifiedPayload,
+      parameters: parameters ?? {},
     );
   }
 

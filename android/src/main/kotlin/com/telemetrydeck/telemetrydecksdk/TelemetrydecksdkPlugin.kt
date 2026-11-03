@@ -2,6 +2,7 @@ package com.telemetrydeck.telemetrydecksdk
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
 import com.telemetrydeck.sdk.PurchaseEvent
 import com.telemetrydeck.sdk.PurchaseType
 import com.telemetrydeck.sdk.TelemetryDeck
@@ -13,11 +14,15 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+
+private const val LOG_TAG = "TelemetryDeck"
 
 /** TelemetrydecksdkPlugin */
 class TelemetrydecksdkPlugin : FlutterPlugin, MethodCallHandler {
@@ -26,9 +31,12 @@ class TelemetrydecksdkPlugin : FlutterPlugin, MethodCallHandler {
     /// This local reference serves to register the plugin with the Flutter Engine and unregister it
     /// when the Flutter Engine is detached from the Activity
     private lateinit var channel: MethodChannel
-    private var applicationContext: Context? = null
-    private val coroutineScope =
-        CoroutineScope(SupervisorJob() + Dispatchers.IO) // Coroutine scope for background tasks
+    internal var applicationContext: Context? = null
+    private val coroutineScope = CoroutineScope(
+        SupervisorJob() + Dispatchers.IO + CoroutineExceptionHandler { _, e ->
+            Log.e(LOG_TAG, "Unhandled error in TelemetryDeck plugin", e)
+        }
+    )
 
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         applicationContext = flutterPluginBinding.applicationContext
@@ -47,23 +55,21 @@ class TelemetrydecksdkPlugin : FlutterPlugin, MethodCallHandler {
             }
 
             "send" -> {
-                // this maps to the queue method which aligns with the behaviour of the iOS SDK
-                nativeQueue(call, result)
+                nativeSignal(call, result)
             }
 
             "startDurationSignal" -> {
-                // this maps to the queue method which aligns with the behaviour of the iOS SDK
                 nativeStartDurationSignal(call, result)
             }
 
             "stopAndSendDurationSignal" -> {
-                // this maps to the queue method which aligns with the behaviour of the iOS SDK
                 nativeStopAndSendDurationSignal(call, result)
             }
 
             "generateNewSession" -> {
-                TelemetryDeck.newSession()
-                result.success(null)
+                runGuarded(result) {
+                    TelemetryDeck.newSession()
+                }
             }
 
             "updateDefaultUser" -> {
@@ -127,7 +133,7 @@ class TelemetrydecksdkPlugin : FlutterPlugin, MethodCallHandler {
     /**
      * Send a signal that represents a navigation event with a source and a destination.
      *
-     * @see <a href="https://telemetrydeck.com/docs/articles/navigation-signals/">Navigation Signals</a>
+     * @see <a href="https://telemetrydeck.com/docs/articles/navigation-events/">Navigation Signals</a>
      * */
     private fun nativeNavigate(call: MethodCall, result: Result) {
         val sourcePath = call.argument<String>("sourcePath")
@@ -139,39 +145,29 @@ class TelemetrydecksdkPlugin : FlutterPlugin, MethodCallHandler {
             return
         }
 
-        coroutineScope.launch {
+        runInBackground(result) {
             TelemetryDeck.navigate(sourcePath, destinationPath, clientUser)
-            withContext(Dispatchers.Main) {
-                result.success(null)
-            }
         }
     }
 
     /**
      * Send a signal that represents a navigation event with a destination and a default source.
      *
-     * @see <a href="https://telemetrydeck.com/docs/articles/navigation-signals/">Navigation Signals</a>
+     * @see <a href="https://telemetrydeck.com/docs/articles/navigation-events/">Navigation Signals</a>
      * */
     private fun nativeNavigateDestination(call: MethodCall, result: Result) {
-        val destinationPath = call.argument<String>("destinationPath")
+        val destinationPath = call.requiredArgument<String>("destinationPath", result) ?: return
         val clientUser = call.argument<String?>("clientUser")
 
-        if (destinationPath == null) {
-            result.error("INVALID_ARGUMENT", "destinationPath is required", null)
-            return
-        }
-
-        coroutineScope.launch {
+        runInBackground(result) {
             TelemetryDeck.navigate(destinationPath, clientUser)
-            withContext(Dispatchers.Main) {
-                result.success(null)
-            }
         }
     }
 
     private fun nativeStop(result: Result) {
-        TelemetryDeck.stop()
-        result.success(null)
+        runGuarded(result) {
+            TelemetryDeck.stop()
+        }
     }
 
     private fun nativeUpdateDefaultUser(
@@ -180,33 +176,22 @@ class TelemetrydecksdkPlugin : FlutterPlugin, MethodCallHandler {
     ) {
         val user = call.arguments<String>()
 
-        coroutineScope.launch {
+        runInBackground(result) {
             TelemetryDeck.newDefaultUser(user)
-            withContext(Dispatchers.Main) {
-                result.success(null)
-            }
         }
     }
 
-    private fun nativeQueue(
+    private fun nativeSignal(
         call: MethodCall,
         result: Result
     ) {
-        val signalType = call.argument<String>("signalType")
-        if (signalType != null) {
-            val clientUser = call.argument<String?>("clientUser")
-            val additionalPayload = call.argument<Map<String, String>>("additionalPayload")
-            val floatValue = call.argument<Double?>("floatValue")
+        val signalType = call.requiredArgument<String>("signalType", result) ?: return
+        val clientUser = call.argument<String?>("clientUser")
+        val additionalPayload = call.argument<Map<String, String>>("additionalPayload")
+        val floatValue = call.argument<Double?>("floatValue")
 
-            coroutineScope.launch {
-                TelemetryDeck.signal(signalType, additionalPayload.orEmpty(), floatValue, clientUser)
-
-                withContext(Dispatchers.Main) {
-                    result.success(null)
-                }
-            }
-        } else {
-            result.error("INVALID_ARGUMENT", "signalType must be provided", null)
+        runInBackground(result) {
+            TelemetryDeck.signal(signalType, additionalPayload.orEmpty(), floatValue, clientUser)
         }
     }
 
@@ -214,19 +199,11 @@ class TelemetrydecksdkPlugin : FlutterPlugin, MethodCallHandler {
         call: MethodCall,
         result: Result
     ) {
-        val signalType = call.argument<String>("signalType")
-        if (signalType != null) {
-            val parameters = call.argument<Map<String, String>>("parameters")
+        val signalType = call.requiredArgument<String>("signalType", result) ?: return
+        val parameters = call.argument<Map<String, String>>("parameters")
 
-            coroutineScope.launch {
-                TelemetryDeck.startDurationSignal(signalType, parameters.orEmpty())
-
-                withContext(Dispatchers.Main) {
-                    result.success(null)
-                }
-            }
-        } else {
-            result.error("INVALID_ARGUMENT", "signalType must be provided", null)
+        runInBackground(result) {
+            TelemetryDeck.startDurationSignal(signalType, parameters.orEmpty())
         }
     }
 
@@ -234,73 +211,44 @@ class TelemetrydecksdkPlugin : FlutterPlugin, MethodCallHandler {
         call: MethodCall,
         result: Result
     ) {
-        val signalType = call.argument<String>("signalType")
-        if (signalType != null) {
-            val parameters = call.argument<Map<String, String>>("parameters")
+        val signalType = call.requiredArgument<String>("signalType", result) ?: return
+        val parameters = call.argument<Map<String, String>>("parameters")
 
-            coroutineScope.launch {
-                TelemetryDeck.stopAndSendDurationSignal(signalType, parameters.orEmpty())
-
-                withContext(Dispatchers.Main) {
-                    result.success(null)
-                }
-            }
-        } else {
-            result.error("INVALID_ARGUMENT", "signalType must be provided", null)
+        runInBackground(result) {
+            TelemetryDeck.stopAndSendDurationSignal(signalType, parameters.orEmpty())
         }
     }
 
     private fun nativeAcquiredUser(call: MethodCall, result: Result) {
-        val channel = call.argument<String>("channel")
-        if (channel == null) {
-            result.error("INVALID_ARGUMENT", "channel is required", null)
-            return
-        }
+        val channel = call.requiredArgument<String>("channel", result) ?: return
 
         val params = call.argument<Map<String, String>>("params")
         val customUserID = call.argument<String?>("customUserID")
 
-        coroutineScope.launch {
+        runInBackground(result) {
             TelemetryDeck.acquiredUser(channel, params.orEmpty(), customUserID)
-            withContext(Dispatchers.Main) {
-                result.success(null)
-            }
         }
     }
 
     private fun nativeLeadStarted(call: MethodCall, result: Result) {
-        val leadId = call.argument<String>("leadId")
-        if (leadId == null) {
-            result.error("INVALID_ARGUMENT", "leadId is required", null)
-            return
-        }
+        val leadId = call.requiredArgument<String>("leadId", result) ?: return
 
         val params = call.argument<Map<String, String>>("params")
         val customUserID = call.argument<String?>("customUserID")
 
-        coroutineScope.launch {
+        runInBackground(result) {
             TelemetryDeck.leadStarted(leadId, params.orEmpty(), customUserID)
-            withContext(Dispatchers.Main) {
-                result.success(null)
-            }
         }
     }
 
     private fun nativeLeadConverted(call: MethodCall, result: Result) {
-        val leadId = call.argument<String>("leadId")
-        if (leadId == null) {
-            result.error("INVALID_ARGUMENT", "leadId is required", null)
-            return
-        }
+        val leadId = call.requiredArgument<String>("leadId", result) ?: return
 
         val params = call.argument<Map<String, String>>("params")
         val customUserID = call.argument<String?>("customUserID")
 
-        coroutineScope.launch {
+        runInBackground(result) {
             TelemetryDeck.leadConverted(leadId, params.orEmpty(), customUserID)
-            withContext(Dispatchers.Main) {
-                result.success(null)
-            }
         }
     }
 
@@ -308,47 +256,30 @@ class TelemetrydecksdkPlugin : FlutterPlugin, MethodCallHandler {
         val params = call.argument<Map<String, String>>("params")
         val customUserID = call.argument<String?>("customUserID")
 
-        coroutineScope.launch {
+        runInBackground(result) {
             TelemetryDeck.onboardingCompleted(params.orEmpty(), customUserID)
-            withContext(Dispatchers.Main) {
-                result.success(null)
-            }
         }
     }
 
     private fun nativeCoreFeatureUsed(call: MethodCall, result: Result) {
-        val featureName = call.argument<String>("featureName")
-        if (featureName == null) {
-            result.error("INVALID_ARGUMENT", "featureName is required", null)
-            return
-        }
+        val featureName = call.requiredArgument<String>("featureName", result) ?: return
 
         val params = call.argument<Map<String, String>>("params")
         val customUserID = call.argument<String?>("customUserID")
 
-        coroutineScope.launch {
+        runInBackground(result) {
             TelemetryDeck.coreFeatureUsed(featureName, params.orEmpty(), customUserID)
-            withContext(Dispatchers.Main) {
-                result.success(null)
-            }
         }
     }
 
     private fun nativePaywallShown(call: MethodCall, result: Result) {
-        val reason = call.argument<String>("reason")
-        if (reason == null) {
-            result.error("INVALID_ARGUMENT", "reason is required", null)
-            return
-        }
+        val reason = call.requiredArgument<String>("reason", result) ?: return
 
         val params = call.argument<Map<String, String>>("params")
         val customUserID = call.argument<String?>("customUserID")
 
-        coroutineScope.launch {
+        runInBackground(result) {
             TelemetryDeck.paywallShown(reason, params.orEmpty(), customUserID)
-            withContext(Dispatchers.Main) {
-                result.success(null)
-            }
         }
     }
 
@@ -389,7 +320,7 @@ class TelemetrydecksdkPlugin : FlutterPlugin, MethodCallHandler {
         val params = call.argument<Map<String, String>>("params")
         val customUserID = call.argument<String?>("customUserID")
 
-        coroutineScope.launch {
+        runInBackground(result) {
             TelemetryDeck.purchaseCompleted(
                 event,
                 countryCode,
@@ -401,56 +332,35 @@ class TelemetrydecksdkPlugin : FlutterPlugin, MethodCallHandler {
                 params.orEmpty(),
                 customUserID
             )
-            withContext(Dispatchers.Main) {
-                result.success(null)
-            }
         }
     }
 
     private fun nativeReferralSent(call: MethodCall, result: Result) {
-        val receiversCount = call.argument<Int>("receiversCount")
-        if (receiversCount == null) {
-            result.error("INVALID_ARGUMENT", "receiversCount is required", null)
-            return
-        }
+        val receiversCount = call.requiredArgument<Int>("receiversCount", result) ?: return
 
         val kind = call.argument<String?>("kind")
         val params = call.argument<Map<String, String>>("params")
         val customUserID = call.argument<String?>("customUserID")
 
-        coroutineScope.launch {
+        runInBackground(result) {
             TelemetryDeck.referralSent(receiversCount, kind, params.orEmpty(), customUserID)
-            withContext(Dispatchers.Main) {
-                result.success(null)
-            }
         }
     }
 
     private fun nativeUserRatingSubmitted(call: MethodCall, result: Result) {
-        val rating = call.argument<Int>("rating")
-        if (rating == null) {
-            result.error("INVALID_ARGUMENT", "rating is required", null)
-            return
-        }
+        val rating = call.requiredArgument<Int>("rating", result) ?: return
 
         val comment = call.argument<String?>("comment")
         val params = call.argument<Map<String, String>>("params")
         val customUserID = call.argument<String?>("customUserID")
 
-        coroutineScope.launch {
+        runInBackground(result) {
             TelemetryDeck.userRatingSubmitted(rating, comment, params.orEmpty(), customUserID)
-            withContext(Dispatchers.Main) {
-                result.success(null)
-            }
         }
     }
 
     private fun nativeErrorOccurred(call: MethodCall, result: Result) {
-        val id = call.argument<String>("id")
-        if (id == null) {
-            result.error("INVALID_ARGUMENT", "id is required", null)
-            return
-        }
+        val id = call.requiredArgument<String>("id", result) ?: return
 
         val categoryString = call.argument<String?>("category")
         val category = when (categoryString) {
@@ -465,26 +375,20 @@ class TelemetrydecksdkPlugin : FlutterPlugin, MethodCallHandler {
         val floatValue = call.argument<Double?>("floatValue")
         val customUserID = call.argument<String?>("customUserID")
 
-        coroutineScope.launch {
+        runInBackground(result) {
             TelemetryDeck.errorOccurred(id, category, message, parameters.orEmpty(), floatValue, customUserID)
-            withContext(Dispatchers.Main) {
-                result.success(null)
-            }
         }
     }
 
     private fun nativeInitialize(call: MethodCall, result: Result) {
-        val arguments = call.arguments as? Map<*, *> // Cast to a Map
+        val arguments = call.arguments as? Map<*, *>
         if (arguments != null) {
-            // Extract values using the expected keys
-            // we extract the required appID parameter
             val appID = arguments["appID"] as? String
             if (appID == null) {
                 result.error("INVALID_ARGUMENT", "Expected value appID is not provided.", null)
                 return
             }
 
-            // additional optional parameters
             val apiBaseURL = arguments["apiBaseURL"] as? String?
             val defaultUser = arguments["defaultUser"] as? String?
             val debug = arguments["debug"] as? Boolean
@@ -495,9 +399,6 @@ class TelemetrydecksdkPlugin : FlutterPlugin, MethodCallHandler {
             val defaultParameters = arguments["defaultParameters"] as? Map<String, String>?
             val namespace = arguments["namespace"] as? String?
 
-
-            // Initialize the client
-            // Do not activate the lifecycle provider
             val builder = TelemetryDeck.Builder()
                 .appID(appID)
 
@@ -525,14 +426,54 @@ class TelemetrydecksdkPlugin : FlutterPlugin, MethodCallHandler {
             }
 
             if (defaultParameters != null) {
-                builder.addProvider(DefaultParameterProvider(defaultParameters))
+                val isSDKMetadata = { key: String -> key.startsWith(SDKMetadataProvider.PARAMETER_PREFIX) }
+                builder.addProvider(DefaultParameterProvider(defaultParameters.filterKeys { !isSDKMetadata(it) }))
+                builder.addProvider(SDKMetadataProvider(defaultParameters.filterKeys(isSDKMetadata)))
             }
 
-            val application = applicationContext as Application
-            TelemetryDeck.start(application, builder)
-            result.success(null)
+            runGuarded(result) {
+                TelemetryDeck.start(applicationContext as Application, builder)
+            }
         } else {
             result.error("INVALID_ARGUMENT", "Arguments are not a map", null)
+        }
+    }
+
+    private fun runGuarded(result: Result, block: () -> Unit) {
+        reply(result, captureFailure(block))
+    }
+
+    private fun runInBackground(result: Result, block: () -> Unit) {
+        coroutineScope.launch {
+            val failure = captureFailure(block)
+            withContext(Dispatchers.Main) {
+                reply(result, failure)
+            }
+        }
+    }
+
+    private fun <T> MethodCall.requiredArgument(key: String, result: Result): T? =
+        argument<T>(key) ?: run {
+            result.error("INVALID_ARGUMENT", "$key is required", null)
+            null
+        }
+
+    private fun captureFailure(block: () -> Unit): Throwable? =
+        try {
+            block()
+            null
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Throwable) {
+            Log.e(LOG_TAG, "TelemetryDeck call failed", e)
+            e
+        }
+
+    private fun reply(result: Result, failure: Throwable?) {
+        if (failure == null) {
+            result.success(null)
+        } else {
+            result.error("TELEMETRY_ERROR", failure.message ?: failure.toString(), null)
         }
     }
 

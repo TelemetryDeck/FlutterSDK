@@ -4,7 +4,7 @@ This section refers to the process of maintaining, upgrading and publishing the 
 
 ## Releasing a new version
 
-1. Create a PR to update the CHANGELOG in order to mention the changes made in the new version. This is optional, if this step is skipped, the `setupversion.sh` will create a generic entry.
+1. Create a PR to update the CHANGELOG in order to mention the changes made in the new version. This is optional, if this step is skipped, the `setversion.sh` will create a generic entry.
 
 2. Merge all changes into `main`.
 
@@ -19,9 +19,9 @@ The Flutter SDK depends on the latest major version of the native SDKs. This is 
 On Android, the dependency is configured in `android/build.gradle`:
 
 ```
-implementation 'com.telemetrydeck:kotlin-sdk:7.2.0'
+implementation 'com.telemetrydeck:kotlin-sdk:7.3.1'
 ```
 
-On iOS and macOS, the dependency is configured in `darwin/telemetrydecksdk/Package.swift` using the Swift Package Manager dependency format `.package(url: "https://github.com/TelemetryDeck/SwiftSDK", exact: "3.0.0-beta.5")`.
+On iOS and macOS, the dependency is configured in `darwin/telemetrydecksdk/Package.swift` using the Swift Package Manager dependency format `.package(url: "https://github.com/TelemetryDeck/SwiftSDK", exact: "3.0.0-beta.6")`.
 
 Note: Flutter's Swift Package Manager integration resolves the SwiftSDK dependency when building the example app, updating the `Package.resolved` files in the ios and macos folders of the example project accordingly.

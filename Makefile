@@ -1,4 +1,8 @@
-.PHONY: help get test analyze checklint lint example-get example-test clean test-all test-android test-ios test-macos test-native
+.PHONY: help get test analyze checklint lint example-get example-test clean smoke-test test-all test-android test-ios test-macos test-native
+
+DEVICE ?= macos
+RUN_ID ?=
+PAT ?=
 
 help:
 	@perl -nle'print $& if m{^[a-zA-Z_-]+:.*?## .*$$}' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
@@ -16,11 +20,17 @@ clean: ## Clean build artifacts
 example-get: ## Install example app dependencies
 	@cd example && flutter pub get
 
+example-test: ## Run example app widget tests
+	@cd example && flutter test test
+
 get: ## Install dependencies
 	@flutter pub get
 
 lint: ## Applies all auto-correctable lint issues and reformats all source files
 	@dart format lib test
+
+smoke-test: ## Run the example integration test: make smoke-test DEVICE=<device-id> PAT=<token> [RUN_ID=<run-id>]
+	@cd example && flutter test integration_test -d $(DEVICE) --dart-define=TD_PAT=$(PAT) --dart-define=TD_RUN_ID=$(RUN_ID)
 
 test: ## Run unit tests
 	@flutter test
@@ -33,9 +43,11 @@ test-android: ## Run Android native bridge tests
 	@cd example/android && ./gradlew telemetrydecksdk:testDebugUnitTest
 
 test-ios: ## Run iOS native bridge tests
-	@xcodebuild test -workspace example/ios/Runner.xcworkspace -scheme Runner -sdk iphonesimulator -destination 'platform=iOS Simulator,OS=26.1,name=iPhone 17' -quiet
+	@cd example && flutter build ios --config-only --no-codesign
+	@xcodebuild test -workspace example/ios/Runner.xcworkspace -scheme Runner -sdk iphonesimulator -destination 'platform=iOS Simulator,OS=latest,name=iPhone 17' -quiet
 
 test-macos: ## Run macOS native bridge tests
+	@cd example && flutter build macos --config-only
 	@xcodebuild test -workspace example/macos/Runner.xcworkspace -scheme Runner -destination 'platform=macOS' -quiet
 
 test-native: ## Run all native bridge tests (iOS, macOS, Android)
