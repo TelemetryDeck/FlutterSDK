@@ -9,6 +9,7 @@ import TelemetryDeck
 
 public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
     private var isRunning = false
+    private var pendingOperation: Task<Void, Never>?
 
     public static func register(with registrar: FlutterPluginRegistrar) {
         #if os(iOS)
@@ -34,9 +35,8 @@ public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
         case "stopAndSendDurationSignal":
             nativeStopAndSendDurationSignal(call, result: result)
         case "generateNewSession":
-            Task {
+            runWhenStarted(result) {
                 await TelemetryDeck.newSession()
-                result(nil)
             }
         case "updateDefaultUser":
             nativeUpdateDefaultUser(call, result: result)
@@ -72,7 +72,7 @@ public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
     /**
      * Send a signal that represents a navigation event with a source and a destination.
      *
-     * @see <a href="https://telemetrydeck.com/docs/articles/navigation-signals/">Navigation Signals</a>
+     * @see <a href="https://telemetrydeck.com/docs/articles/navigation-events/">Navigation Signals</a>
      * */
     private func nativeNavigate(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         guard let arguments = call.arguments as? [String: Any],
@@ -82,16 +82,15 @@ public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
             return
         }
         let clientUser = arguments["clientUser"] as? String
-        Task {
+        runWhenStarted(result) {
             await TelemetryDeck.navigationPathChanged(from: sourcePath, to: destinationPath, customUserID: clientUser)
-            result(nil)
         }
     }
 
     /**
      * Send a signal that represents a navigation event with a destination and a default source.
      *
-     * @see <a href="https://telemetrydeck.com/docs/articles/navigation-signals/">Navigation Signals</a>
+     * @see <a href="https://telemetrydeck.com/docs/articles/navigation-events/">Navigation Signals</a>
      * */
     private func nativeNavigateDestination(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         guard let arguments = call.arguments as? [String: Any],
@@ -100,24 +99,43 @@ public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
             return
         }
         let clientUser = arguments["clientUser"] as? String
-        Task {
+        runWhenStarted(result) {
             await TelemetryDeck.navigationPathChanged(to: destinationPath, customUserID: clientUser)
-            result(nil)
         }
     }
 
     private func nativeStop(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         isRunning = false
-        Task {
+        enqueue {
             await TelemetryDeck.terminate()
             result(nil)
         }
     }
 
-    private func nativeUpdateDefaultUser(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        Task {
-            await TelemetryDeck.setUserIdentifier(call.arguments as? String)
+    /// Runs `operation` after every previously enqueued operation has finished, so native calls keep the order of the Dart calls.
+    private func enqueue(_ operation: @escaping @Sendable () async -> Void) {
+        let previous = pendingOperation
+        pendingOperation = Task {
+            await previous?.value
+            await operation()
+        }
+    }
+
+    private func runWhenStarted(_ result: @escaping FlutterResult, _ operation: @escaping @Sendable () async -> Void) {
+        guard isRunning else {
             result(nil)
+            return
+        }
+        enqueue {
+            await operation()
+            result(nil)
+        }
+    }
+
+    private func nativeUpdateDefaultUser(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        let user = call.arguments as? String
+        runWhenStarted(result) {
+            await TelemetryDeck.setUserIdentifier(user)
         }
     }
 
@@ -127,18 +145,12 @@ public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
             return
         }
 
-        guard isRunning else {
-            result(nil)
-            return
-        }
-
         let clientUser = arguments["clientUser"] as? String
         let additionalPayload = arguments["additionalPayload"] as? [String : String] ?? [:]
         let floatValue = arguments["floatValue"] as? Double
 
-        Task {
+        runWhenStarted(result) {
             await TelemetryDeck.event(signalType, parameters: EventParameters(additionalPayload), floatValue: floatValue, customUserID: clientUser)
-            result(nil)
         }
     }
 
@@ -148,16 +160,10 @@ public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
             return
         }
 
-        guard isRunning else {
-            result(nil)
-            return
-        }
-
         let parameters = arguments["parameters"] as? [String : String] ?? [:]
 
-        Task {
+        runWhenStarted(result) {
             await TelemetryDeck.startDurationEvent(signalType, parameters: EventParameters(parameters), includeBackgroundTime: false)
-            result(nil)
         }
     }
 
@@ -167,16 +173,10 @@ public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
             return
         }
 
-        guard isRunning else {
-            result(nil)
-            return
-        }
-
         let parameters = arguments["parameters"] as? [String : String] ?? [:]
 
-        Task {
+        runWhenStarted(result) {
             await TelemetryDeck.stopAndSendDurationEvent(signalType, parameters: EventParameters(parameters))
-            result(nil)
         }
     }
 
@@ -186,7 +186,7 @@ public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
             return
         }
 
-        // appD is required
+        // appID is required
         guard let appID: String = arguments["appID"] as? String else {
             result(FlutterError(code: "INVALID_ARGUMENT", message: "Expected value appID is not provided.", details: nil))
             return
@@ -206,23 +206,26 @@ public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
             salt: arguments["salt"] as? String ?? ""
         )
 
+        let defaultParameters = arguments["defaultParameters"] as? [String: String] ?? [:]
+        let sdkMetadata = defaultParameters.filter { $0.key.hasPrefix(SDKMetadataProcessor.parameterPrefix) }
         let processors = TelemetryDeck.defaultProcessors(
             defaultUser: arguments["defaultUser"] as? String,
             testMode: arguments["testMode"] as? Bool,
             eventPrefix: arguments["defaultSignalPrefix"] as? String,
             parameterPrefix: arguments["defaultParameterPrefix"] as? String,
-            defaultParameters: EventParameters(arguments["defaultParameters"] as? [String: String] ?? [:])
-        )
+            defaultParameters: EventParameters(defaultParameters.filter { !$0.key.hasPrefix(SDKMetadataProcessor.parameterPrefix) })
+        ) + [SDKMetadataProcessor(parameters: sdkMetadata)]
 
         // by default, the library logs with level .info
         let logger: (any Logging)? = (arguments["debug"] as? Bool == true) ? DefaultLogger(minimumLevel: .debug) : nil
 
-        Task {
+        isRunning = true
+        enqueue {
             do {
                 try await TelemetryDeck.initialize(configuration: config, processors: processors, logger: logger)
-                isRunning = true
                 result(nil)
             } catch {
+                await MainActor.run { self.isRunning = false }
                 result(FlutterError(code: "INIT_FAILED", message: error.localizedDescription, details: nil))
             }
         }
@@ -236,9 +239,8 @@ public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
         }
         let params = EventParameters(arguments["params"] as? [String: String] ?? [:])
         let customUserID = arguments["customUserID"] as? String
-        Task {
+        runWhenStarted(result) {
             await TelemetryDeck.acquiredUser(channel: channel, parameters: params, customUserID: customUserID)
-            result(nil)
         }
     }
 
@@ -250,9 +252,8 @@ public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
         }
         let params = EventParameters(arguments["params"] as? [String: String] ?? [:])
         let customUserID = arguments["customUserID"] as? String
-        Task {
+        runWhenStarted(result) {
             await TelemetryDeck.leadStarted(leadID: leadId, parameters: params, customUserID: customUserID)
-            result(nil)
         }
     }
 
@@ -264,9 +265,8 @@ public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
         }
         let params = EventParameters(arguments["params"] as? [String: String] ?? [:])
         let customUserID = arguments["customUserID"] as? String
-        Task {
+        runWhenStarted(result) {
             await TelemetryDeck.leadConverted(leadID: leadId, parameters: params, customUserID: customUserID)
-            result(nil)
         }
     }
 
@@ -277,9 +277,8 @@ public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
         }
         let params = EventParameters(arguments["params"] as? [String: String] ?? [:])
         let customUserID = arguments["customUserID"] as? String
-        Task {
+        runWhenStarted(result) {
             await TelemetryDeck.onboardingCompleted(parameters: params, customUserID: customUserID)
-            result(nil)
         }
     }
 
@@ -291,9 +290,8 @@ public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
         }
         let params = EventParameters(arguments["params"] as? [String: String] ?? [:])
         let customUserID = arguments["customUserID"] as? String
-        Task {
+        runWhenStarted(result) {
             await TelemetryDeck.coreFeatureUsed(featureName: featureName, parameters: params, customUserID: customUserID)
-            result(nil)
         }
     }
 
@@ -305,9 +303,8 @@ public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
         }
         let params = EventParameters(arguments["params"] as? [String: String] ?? [:])
         let customUserID = arguments["customUserID"] as? String
-        Task {
+        runWhenStarted(result) {
             await TelemetryDeck.paywallShown(reason: reason, parameters: params, customUserID: customUserID)
-            result(nil)
         }
     }
 
@@ -333,7 +330,7 @@ public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
         let type: TelemetryDeck.PurchaseType = purchaseTypeString == "subscription" ? .subscription : .oneTimePurchase
         let price = Decimal(priceAmountMicros) / 1_000_000
 
-        Task {
+        runWhenStarted(result) { [params] in
             switch eventString {
             case "freeTrialStarted":
                 await TelemetryDeck.freeTrialStarted(
@@ -365,7 +362,6 @@ public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
                     customUserID: customUserID
                 )
             }
-            result(nil)
         }
     }
 
@@ -378,9 +374,8 @@ public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
         let kind = arguments["kind"] as? String
         let params = EventParameters(arguments["params"] as? [String: String] ?? [:])
         let customUserID = arguments["customUserID"] as? String
-        Task {
+        runWhenStarted(result) {
             await TelemetryDeck.referralSent(receiversCount: receiversCount, kind: kind, parameters: params, customUserID: customUserID)
-            result(nil)
         }
     }
 
@@ -393,9 +388,8 @@ public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
         let comment = arguments["comment"] as? String
         let params = EventParameters(arguments["params"] as? [String: String] ?? [:])
         let customUserID = arguments["customUserID"] as? String
-        Task {
+        runWhenStarted(result) {
             await TelemetryDeck.userRatingSubmitted(rating: rating, comment: comment, parameters: params, customUserID: customUserID)
-            result(nil)
         }
     }
 
@@ -406,32 +400,24 @@ public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
             return
         }
 
-        let categoryString = arguments["category"] as? String
         let category: ErrorCategory?
-        if let categoryString = categoryString {
-            switch categoryString {
-            case "thrownException":
-                category = .thrownException
-            case "userInput":
-                category = .userInput
-            case "appState":
-                category = .appState
-            default:
-                category = nil
-            }
-        } else {
+        switch arguments["category"] as? String {
+        case "thrownException":
+            category = .thrownException
+        case "userInput":
+            category = .userInput
+        case "appState":
+            category = .appState
+        default:
             category = nil
         }
 
         let message = arguments["message"] as? String
-        var params = EventParameters(arguments["parameters"] as? [String: String] ?? [:])
-        if let categoryString, category == nil {
-            params["category"] = categoryString
-        }
+        let params = EventParameters(arguments["parameters"] as? [String: String] ?? [:])
         let floatValue = arguments["floatValue"] as? Double
         let customUserID = arguments["customUserID"] as? String
 
-        Task {
+        runWhenStarted(result) {
             await TelemetryDeck.errorOccurred(
                 id: id,
                 category: category,
@@ -440,7 +426,6 @@ public class TelemetrydecksdkPlugin: NSObject, FlutterPlugin {
                 floatValue: floatValue,
                 customUserID: customUserID
             )
-            result(nil)
         }
     }
 }

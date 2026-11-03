@@ -108,7 +108,7 @@
 			children = (
 				331C80D7294CF71000263BE5 /* RunnerTests.swift */,
 			);
-			path = RunnerTests;
+			path = ../ios/RunnerTests;
 			sourceTree = "<group>";
 		};
 		33BA886A226E78AF003329D5 /* Configs */ = {

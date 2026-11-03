@@ -1,3 +1,19 @@
+## 5.0.2
+
+- [Android] The KotlinSDK has been updated to [7.3.1](https://github.com/TelemetryDeck/KotlinSDK/releases/tag/7.3.1).
+
+- [Android] The plugin no longer applies the `kotlin-android` Gradle plugin, which is built into AGP 9.
+
+- [iOS/macOS] The SwiftSDK has been updated to [3.0.0-beta.6](https://github.com/TelemetryDeck/SwiftSDK/releases/tag/3.0.0-beta.6).
+
+- [iOS/macOS] Signals sent right after `start()` are no longer dropped while the native SDK is still initializing.
+
+- [iOS/macOS] Signal, navigation, duration and preset event methods are ignored after `stop()`.
+
+- [iOS/macOS] The Flutter SDK metadata parameters (`TelemetryDeck.SDK.*`) no longer log reserved-prefix errors on every signal.
+
+- `ErrorCategory.integration` and `ErrorCategory.unknown` are deprecated. The native SDKs do not support them, so the category is omitted from the `TelemetryDeck.Error.occurred` signal on every platform. On iOS/macOS they were previously sent as a plain `category` parameter.
+
 ## 5.0.1
 
 - [BREAKING] **Minimum platform versions have been raised:**
