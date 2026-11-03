@@ -1,6 +1,6 @@
 # telemetrydecksdk example
 
-A small test app for the TelemetryDeck Flutter plugin. It starts the SDK against a namespace in test mode, sends an `App.launched` signal on startup and offers a button for every signal-sending API method (plain and enriched signals, duration signals, navigation, session and user updates, the acquisition, activation, revenue, referral and feedback presets, and error signals). Every button awaits the native call and confirms it with a snackbar; failures surface in the console.
+A small test app for the TelemetryDeck Flutter plugin.
 
 ## Run the example on a device
 
